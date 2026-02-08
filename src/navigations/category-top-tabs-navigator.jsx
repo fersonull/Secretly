@@ -18,18 +18,18 @@ export default function CategoryTopTabsNavigator() {
       <TopTab.Navigator
         screenOptions={{
           tabBarStyle: {
-            backgroundColor: isDark ? '#0A0A0A' : '#FFFFFF',
-            borderBottomColor: isDark ? '#262626' : '#E5E7EB',
+            backgroundColor: isDark ? '#27272A' : '#FFFFFF',
+            borderBottomColor: isDark ? '#3F3F46' : '#E4E4E7',
             borderBottomWidth: 1,
             elevation: 0,
           },
           tabBarIndicatorStyle: {
-            backgroundColor: '#0EA5E9',
+            backgroundColor: '#3B82F6',
             height: 2,
           },
-          tabBarActiveTintColor: '#0EA5E9',
-          tabBarInactiveTintColor: isDark ? '#A1A1AA' : '#6B7280',
-          tabBarPressColor: isDark ? '#262626' : '#F9FAFB',
+          tabBarActiveTintColor: '#3B82F6',
+          tabBarInactiveTintColor: isDark ? '#A1A1AA' : '#71717A',
+          tabBarPressColor: isDark ? '#3F3F46' : '#FAFAFA',
           tabBarLabelStyle: {
             fontFamily: 'InstrumentSans-Medium',
             textTransform: 'none',
@@ -41,7 +41,7 @@ export default function CategoryTopTabsNavigator() {
           },
         }}
         sceneContainerStyle={{
-          backgroundColor: isDark ? '#0A0A0A' : '#FFFFFF',
+          backgroundColor: isDark ? '#27272A' : '#FFFFFF',
         }}
       >
         <TopTab.Screen

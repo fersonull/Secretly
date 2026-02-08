@@ -17,11 +17,11 @@ export default function MainDrawerNavigator() {
       screenOptions={{
         headerShown: false,
         drawerStyle: {
-          backgroundColor: isDark ? '#0A0A0A' : '#FFFFFF',
+          backgroundColor: isDark ? '#27272A' : '#FFFFFF',
           width: 300,
         },
-        drawerActiveTintColor: '#0EA5E9',
-        drawerInactiveTintColor: isDark ? '#A1A1AA' : '#6B7280',
+        drawerActiveTintColor: '#3B82F6',
+        drawerInactiveTintColor: isDark ? '#A1A1AA' : '#71717A',
         drawerLabelStyle: {
           fontFamily: 'InstrumentSans-Medium',
           fontSize: 15,

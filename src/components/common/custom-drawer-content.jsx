@@ -1,5 +1,8 @@
 import { View, Text } from 'react-native';
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+} from '@react-navigation/drawer';
 import { IconLogo } from './icon-logo';
 import { Logo } from './logo';
 
@@ -7,10 +10,10 @@ export default function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView
       {...props}
-      contentContainerClassName="flex-1"
-      contentContainerStyle={{ paddingTop: 12 }}
+      contentContainerClassName="flex-1 bg-background dark:bg-dark-background"
+      className="bg-background dark:bg-dark-background"
     >
-      <View className="px-6 pb-4 border-b border-border dark:border-dark-border">
+      <View className="px-6 pt-4 pb-4 border-b border-border dark:border-dark-border">
         <IconLogo />
         <Logo />
         <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm">

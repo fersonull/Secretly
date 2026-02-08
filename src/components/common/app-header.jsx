@@ -21,7 +21,7 @@ export default function AppHeader({ title }) {
         className="w-10 h-10 items-center justify-center"
         style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
       >
-        <Lucide name="menu" size={22} color="#0EA5E9" />
+        <Lucide name="menu" size={22} color="#3B82F6" />
       </Pressable>
       <Text className="text-foreground dark:text-dark-foreground font-sans-bold text-lg ml-2">
         {title}

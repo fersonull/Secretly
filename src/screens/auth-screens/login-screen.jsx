@@ -91,11 +91,11 @@ const LoginScreen = ({ navigation }) => {
                 Master Password
               </Text>
               <View className="bg-background dark:bg-dark-background border border-input dark:border-dark-input rounded-md flex-row items-center px-3">
-                <Lucide name="lock" size={20} color="hsl(215.4 16.3% 46.9%)" />
+                <Lucide name="lock" size={20} color="#71717A" />
                 <TextInput
                   className="flex-1 py-3 px-3 text-foreground dark:text-dark-foreground font-sans"
                   placeholder="Enter your master password"
-                  placeholderTextColor="hsl(215.4 16.3% 46.9%)"
+                  placeholderTextColor="#71717A"
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={!showPassword}
@@ -108,7 +108,7 @@ const LoginScreen = ({ navigation }) => {
                   <Lucide
                     name={showPassword ? 'eye-off' : 'eye'}
                     size={20}
-                    color="hsl(215.4 16.3% 46.9%)"
+                    color="#71717A"
                   />
                 </TouchableOpacity>
               </View>
@@ -140,10 +140,7 @@ const LoginScreen = ({ navigation }) => {
               <Lucide
                 name="fingerprint"
                 size={20}
-                color={
-                  theme.dark ? 'hsl(0, 0%, 100%)' : 'hsl(215.4 16.3% 46.9%)'
-                }
-                // color="hsl(215.4 16.3% 46.9%)"
+                color={theme.dark ? '#FAFAFA' : '#71717A'}
                 style={{ marginRight: 8 }}
               />
               <Text className="text-secondary-foreground dark:text-dark-secondary-foreground font-sans-medium text-base">
