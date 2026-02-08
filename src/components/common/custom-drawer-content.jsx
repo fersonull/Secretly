@@ -5,20 +5,29 @@ import { Logo } from './logo';
 
 export default function CustomDrawerContent(props) {
   return (
-    <DrawerContentScrollView {...props} contentContainerClassName="flex-1">
-      <View className="px-6 pt-6 pb-4 border-b border-border dark:border-dark-border">
+    <DrawerContentScrollView
+      {...props}
+      contentContainerClassName="flex-1"
+      contentContainerStyle={{ paddingTop: 12 }}
+    >
+      <View className="px-6 pb-4 border-b border-border dark:border-dark-border">
         <IconLogo />
         <Logo />
-        <Text className="text-muted-foreground dark:text-dark-muted-foreground font-sans">
+        <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm">
           Securely store your credentials
         </Text>
       </View>
-      <View className="flex-1 px-4 pt-4">
+      <View className="flex-1 px-4 pt-3">
         <DrawerItemList {...props} />
       </View>
       <View className="px-6 py-5 border-t border-border dark:border-dark-border">
-        <Text className="text-muted-foreground dark:text-dark-muted-foreground font-sans text-xs">
+        <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-xs">
           Version 1.0.0
+        </Text>
+      </View>
+      <View className="px-6 pb-6">
+        <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-xs">
+          Trusted by teams worldwide
         </Text>
       </View>
     </DrawerContentScrollView>

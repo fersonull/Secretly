@@ -8,10 +8,8 @@ import CustomDrawerContent from '../components/common/custom-drawer-content';
 const Drawer = createDrawerNavigator();
 
 export default function MainDrawerNavigator() {
-  const theme = useTheme();
-  const inactiveTint = theme.dark
-    ? 'hsl(215 20.2% 65.1%)'
-    : 'hsl(215.4 16.3% 46.9%)';
+  const colorScheme = useTheme();
+  const isDark = colorScheme === 'dark';
 
   return (
     <Drawer.Navigator
@@ -19,13 +17,21 @@ export default function MainDrawerNavigator() {
       screenOptions={{
         headerShown: false,
         drawerStyle: {
-          backgroundColor: theme.colors.background,
+          backgroundColor: isDark ? '#0A0A0A' : '#FFFFFF',
+          width: 300,
         },
-        drawerActiveTintColor: theme.colors.primary,
-        drawerInactiveTintColor: inactiveTint,
+        drawerActiveTintColor: '#0EA5E9',
+        drawerInactiveTintColor: isDark ? '#A1A1AA' : '#6B7280',
         drawerLabelStyle: {
           fontFamily: 'InstrumentSans-Medium',
-          fontSize: 16,
+          fontSize: 15,
+        },
+        drawerItemStyle: {
+          borderRadius: 6,
+          marginVertical: 2,
+        },
+        drawerContentContainerStyle: {
+          paddingTop: 0,
         },
       }}
     >

@@ -9,10 +9,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const TopTab = createMaterialTopTabNavigator();
 
 export default function CategoryTopTabsNavigator() {
-  const theme = useTheme();
-  const inactiveTint = theme.dark
-    ? 'hsl(215 20.2% 65.1%)'
-    : 'hsl(215.4 16.3% 46.9%)';
+  const colorScheme = useTheme();
+  const isDark = colorScheme === 'dark';
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-dark-background">
@@ -20,28 +18,31 @@ export default function CategoryTopTabsNavigator() {
       <TopTab.Navigator
         screenOptions={{
           tabBarStyle: {
-            backgroundColor: theme.colors.background,
-            borderBottomColor: theme.dark
-              ? 'hsl(217.2 32.6% 17.5%)'
-              : 'hsl(214.3 31.8% 91.4%)',
+            backgroundColor: isDark ? '#0A0A0A' : '#FFFFFF',
+            borderBottomColor: isDark ? '#262626' : '#E5E7EB',
             borderBottomWidth: 1,
+            elevation: 0,
           },
           tabBarIndicatorStyle: {
-            backgroundColor: theme.colors.primary,
-            height: 3,
-            borderRadius: 999,
+            backgroundColor: '#0EA5E9',
+            height: 2,
           },
-          tabBarActiveTintColor: theme.colors.primary,
-          tabBarInactiveTintColor: inactiveTint,
-          tabBarPressColor: theme.dark
-            ? 'hsl(217.2 32.6% 17.5%)'
-            : 'hsl(210 40% 96.1%)',
+          tabBarActiveTintColor: '#0EA5E9',
+          tabBarInactiveTintColor: isDark ? '#A1A1AA' : '#6B7280',
+          tabBarPressColor: isDark ? '#262626' : '#F9FAFB',
           tabBarLabelStyle: {
             fontFamily: 'InstrumentSans-Medium',
-            textTransform: 'capitalize',
+            textTransform: 'none',
+            letterSpacing: 0.2,
+            fontSize: 14,
+          },
+          tabBarItemStyle: {
+            paddingVertical: 6,
           },
         }}
-        sceneContainerStyle={{ backgroundColor: theme.colors.background }}
+        sceneContainerStyle={{
+          backgroundColor: isDark ? '#0A0A0A' : '#FFFFFF',
+        }}
       >
         <TopTab.Screen
           name="SocialMedia"

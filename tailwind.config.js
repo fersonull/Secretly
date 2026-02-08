@@ -15,90 +15,73 @@ module.exports = {
         'sans-medium': 'InstrumentSans-Medium',
       },
       colors: {
-        border: 'hsl(214.3 31.8% 91.4%)',
-        input: 'hsl(214.3 31.8% 91.4%)',
-        ring: 'hsl(222.2 84% 4.9%)',
-        background: 'hsl(0 0% 100%)',
-        foreground: 'hsl(222.2 84% 4.9%)',
+        // Light Mode Backgrounds
+        background: '#FFFFFF',
+        'background-card': '#FFFFFF',
+        'background-secondary': '#F9FAFB',
+        'background-muted': '#F3F4F6',
 
+        // Light Mode Text
+        foreground: '#0A0A0A',
+        'foreground-secondary': '#374151',
+        'foreground-muted': '#6B7280',
+
+        // Light Mode Borders
+        border: '#E5E7EB',
+
+        // Dark Mode Backgrounds
+        'dark-background': '#0A0A0A',
+        'dark-background-card': '#171717',
+        'dark-background-secondary': '#27272A',
+        'dark-background-muted': '#1C1C1C',
+
+        // Dark Mode Text
+        'dark-foreground': '#FAFAFA',
+        'dark-foreground-secondary': '#D4D4D8',
+        'dark-foreground-muted': '#A1A1AA',
+
+        // Dark Mode Borders
+        'dark-border': '#262626',
+
+        // Semantic Colors - Primary (Brand)
         primary: {
-          DEFAULT: 'hsl(222.2 47.4% 11.2%)',
-          foreground: 'hsl(210 40% 98%)',
+          DEFAULT: '#0EA5E9',
+          600: '#0284C7',
+          700: '#075985',
+          foreground: '#FFFFFF',
         },
 
-        secondary: {
-          DEFAULT: 'hsl(210 40% 96.1%)',
-          foreground: 'hsl(222.2 47.4% 11.2%)',
+        // Semantic Colors - Success
+        success: {
+          DEFAULT: '#22C55E',
+          600: '#16A34A',
+          700: '#15803D',
+          foreground: '#FFFFFF',
         },
 
-        destructive: {
-          DEFAULT: 'hsl(0 84.2% 60.2%)',
-          foreground: 'hsl(210 40% 98%)',
+        // Semantic Colors - Warning
+        warning: {
+          DEFAULT: '#F59E0B',
+          600: '#D97706',
+          700: '#B45309',
+          foreground: '#FFFFFF',
         },
 
-        muted: {
-          DEFAULT: 'hsl(210 40% 96.1%)',
-          foreground: 'hsl(215.4 16.3% 46.9%)',
+        // Semantic Colors - Danger
+        danger: {
+          DEFAULT: '#EF4444',
+          600: '#DC2626',
+          700: '#B91C1C',
+          foreground: '#FFFFFF',
         },
 
-        accent: {
-          DEFAULT: 'hsl(210 40% 96.1%)',
-          foreground: 'hsl(222.2 47.4% 11.2%)',
-        },
+        // Alias for input fields
+        input: '#F3F4F6',
+        'dark-input': '#1C1C1C',
 
-        popover: {
-          DEFAULT: 'hsl(0 0% 100%)',
-          foreground: 'hsl(222.2 84% 4.9%)',
-        },
-
-        card: {
-          DEFAULT: 'hsl(0 0% 100%)',
-          foreground: 'hsl(222.2 84% 4.9%)',
-        },
-
-        // Dark mode colors
-        dark: {
-          border: 'hsl(217.2 32.6% 17.5%)',
-          input: 'hsl(217.2 32.6% 17.5%)',
-          ring: 'hsl(212.7 26.8% 83.9%)',
-          background: 'hsl(222.2 84% 4.9%)',
-          foreground: 'hsl(210 40% 98%)',
-
-          primary: {
-            DEFAULT: 'hsl(210 40% 98%)',
-            foreground: 'hsl(222.2 47.4% 11.2%)',
-          },
-
-          secondary: {
-            DEFAULT: 'hsl(217.2 32.6% 17.5%)',
-            foreground: 'hsl(210 40% 98%)',
-          },
-
-          destructive: {
-            DEFAULT: 'hsl(0 62.8% 30.6%)',
-            foreground: 'hsl(210 40% 98%)',
-          },
-
-          muted: {
-            DEFAULT: 'hsl(217.2 32.6% 17.5%)',
-            foreground: 'hsl(215 20.2% 65.1%)',
-          },
-
-          accent: {
-            DEFAULT: 'hsl(217.2 32.6% 17.5%)',
-            foreground: 'hsl(210 40% 98%)',
-          },
-
-          popover: {
-            DEFAULT: 'hsl(222.2 84% 4.9%)',
-            foreground: 'hsl(210 40% 98%)',
-          },
-
-          card: {
-            DEFAULT: 'hsl(222.2 84% 4.9%)',
-            foreground: 'hsl(210 40% 98%)',
-          },
-        },
+        // Legacy aliases for compatibility
+        'muted-foreground': '#6B7280',
+        'dark-muted-foreground': '#A1A1AA',
       },
       borderRadius: {
         lg: '8px',
