@@ -15,8 +15,11 @@ import { Divider } from '../../components/ui/divider';
 import { GroupInput } from '../../components/ui/group-input';
 import { Logo } from '../../components/common/logo';
 import { IconLogo } from '../../components/common/icon-logo';
+import { useTheme } from '@react-navigation/native';
 
 const LoginScreen = ({ navigation }) => {
+  const theme = useTheme();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -164,7 +167,10 @@ const LoginScreen = ({ navigation }) => {
               <Lucide
                 name="fingerprint"
                 size={20}
-                color="hsl(222.2 47.4% 11.2%)"
+                color={
+                  theme.dark ? 'hsl(0, 0%, 100%)' : 'hsl(215.4 16.3% 46.9%)'
+                }
+                // color="hsl(215.4 16.3% 46.9%)"
                 style={{ marginRight: 8 }}
               />
               <Text className="text-secondary-foreground dark:text-dark-secondary-foreground font-sans-medium text-base">

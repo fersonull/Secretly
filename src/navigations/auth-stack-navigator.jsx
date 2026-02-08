@@ -11,8 +11,20 @@ const RootStackNavigator = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          animation: 'ios_from_left',
+        }}
+      />
+      <Stack.Screen
+        name="Register"
+        component={RegisterScreen}
+        options={{
+          animation: 'ios_from_right',
+        }}
+      />
     </Stack.Navigator>
   );
 };
