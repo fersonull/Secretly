@@ -5,8 +5,6 @@ import { useTheme } from '@react-navigation/native';
 export function IconLogo() {
   const theme = useTheme();
 
-  console.log(theme);
-
   return (
     <View className="bg-primary dark:bg-dark-primary w-20 h-20 rounded-2xl items-center justify-center mb-4">
       <Lucide
