@@ -1,11 +1,14 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import "./global.css"
+import { NavigationContainer } from '@react-navigation/native';
+import RootStackNavigator from './src/navigations/root-stack-navigator';
+import Providers from './src/providers/providers';
+import './global.css';
 
 export default function App() {
   return (
-    <View className='flex-1 items-center justify-center'>
-      <Text className='text-2xl font-bold'>You are now set!</Text>
-    </View>
-  )
+    <NavigationContainer>
+      <Providers>
+        <RootStackNavigator />
+      </Providers>
+    </NavigationContainer>
+  );
 }
