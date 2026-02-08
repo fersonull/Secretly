@@ -22,7 +22,7 @@ const LoginScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     setIsLoading(true);
 
     setTimeout(() => {
@@ -63,7 +63,7 @@ const LoginScreen = ({ navigation }) => {
             {/* Form Section */}
             <View className="mb-8">
               <Text className="text-foreground dark:text-dark-foreground font-sans-bold text-2xl mb-2">
-                Welcome back
+                Create your account
               </Text>
               <Text className="text-muted-foreground dark:text-dark-muted-foreground font-sans">
                 Enter your credentials to access your vault
@@ -83,7 +83,7 @@ const LoginScreen = ({ navigation }) => {
             </View>
 
             {/* Password Input */}
-            <View className="mb-2">
+            <View className="mb-4">
               <Text className="text-sm font-sans-medium text-foreground dark:text-dark-foreground mb-2">
                 Master Password
               </Text>
@@ -110,22 +110,49 @@ const LoginScreen = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
             </View>
+            <View className="mb-6">
+              <Text className="text-sm font-sans-medium text-foreground dark:text-dark-foreground mb-2">
+                Confirm Password
+              </Text>
+              <View className="bg-background dark:bg-dark-background border border-input dark:border-dark-input rounded-md flex-row items-center px-3">
+                <Lucide name="lock" size={20} color="hsl(215.4 16.3% 46.9%)" />
+                <TextInput
+                  className="flex-1 py-3 px-3 text-foreground dark:text-dark-foreground font-sans"
+                  placeholder="Cofirm your password"
+                  placeholderTextColor="hsl(215.4 16.3% 46.9%)"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                  className="p-1"
+                >
+                  <Lucide
+                    name={showPassword ? 'eye-off' : 'eye'}
+                    size={20}
+                    color="hsl(215.4 16.3% 46.9%)"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
 
             {/* Forgot Password */}
-            <TouchableOpacity className="self-end mb-6">
+            {/* <TouchableOpacity className="self-end mb-6">
               <Text className="text-primary dark:text-dark-primary font-sans-medium text-sm">
                 Forgot password?
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             {/* Login Button */}
             <TouchableOpacity
-              className="bg-primary dark:bg-dark-primary rounded-md py-3.5 mb-4 active:opacity-90"
-              onPress={handleLogin}
+              className="bg-primary dark:bg-dark-primary rounded-md py-3.5  mb-4 active:opacity-90"
+              onPress={handleRegister}
               disabled={isLoading}
             >
               <Text className="text-primary-foreground dark:text-dark-primary-foreground font-sans-bold text-center text-base">
-                {isLoading ? 'Signing in...' : 'Sign in'}
+                {isLoading ? 'Registering...' : 'Register'}
               </Text>
             </TouchableOpacity>
 
@@ -151,11 +178,11 @@ const LoginScreen = ({ navigation }) => {
             {/* Sign Up Link */}
             <View className="flex-row items-center justify-center pt-6">
               <Text className="text-muted-foreground dark:text-dark-muted-foreground font-sans">
-                Don't have an account?{' '}
+                Already have an account?{' '}
               </Text>
-              <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                 <Text className="text-primary dark:text-dark-primary font-sans-bold">
-                  Sign up
+                  Login
                 </Text>
               </TouchableOpacity>
             </View>
