@@ -115,9 +115,19 @@ export default function CredentialCard({
               />
             </View>
             <View className="flex-1">
-              <Text className="text-foreground dark:text-dark-foreground font-sans-bold text-base">
-                {item.title}
-              </Text>
+              <View className="flex-row items-center justify-between ">
+                <Text className="text-foreground dark:text-dark-foreground font-sans-bold text-base flex-1">
+                  {item.title}
+                </Text>
+                {item.passwordStrength === 'weak' && (
+                  <View className="bg-danger/10 px-2 py-1 rounded-full flex-row items-center ml-2">
+                    <Lucide name="shield-alert" size={12} color="#EF4444" />
+                    <Text className="text-danger font-sans-medium text-xs ml-1">
+                      Weak
+                    </Text>
+                  </View>
+                )}
+              </View>
               <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm">
                 {item.username}
               </Text>

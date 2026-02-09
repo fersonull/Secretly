@@ -16,6 +16,7 @@ import IosToast from '../../components/ui/ios-toast';
 import IosLoading from '../../components/ui/ios-loading';
 import { useToast } from '../../hooks/use-toast';
 import { useAlert } from '../../hooks/use-alert';
+import { calculatePasswordStrength } from '../../utils/password-strength';
 
 export default function AddEditCredentialScreen() {
   const navigation = useNavigation();
@@ -60,6 +61,7 @@ export default function AddEditCredentialScreen() {
 
     setIsLoading(true);
     
+    const passwordStrengthInfo = calculatePasswordStrength(formData.password);
     const credentialData = {
       title: formData.title,
       username: formData.username,
@@ -67,7 +69,7 @@ export default function AddEditCredentialScreen() {
       url: formData.url,
       notes: formData.notes,
       category: formData.category,
-      passwordStrength: 'medium', // Calculate this based on password strength
+      passwordStrength: passwordStrengthInfo.strength,
     };
 
     const result = isEdit

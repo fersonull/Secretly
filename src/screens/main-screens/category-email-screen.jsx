@@ -3,10 +3,12 @@ import { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Lucide from '@react-native-vector-icons/lucide';
 import { useCategoryCredentials } from '../../hooks/use-category-credentials';
+import { useCredentials } from '../../hooks/use-credentials';
 import CredentialCard from '../../components/ui/credential-card';
 
 export default function CategoryEmailScreen() {
   const navigation = useNavigation();
+  const { refresh } = useCredentials();
   const { credentials } = useCategoryCredentials('email');
 
   const handleViewCredential = useCallback(
@@ -16,11 +18,20 @@ export default function CategoryEmailScreen() {
     [navigation]
   );
 
+  const handleEditCredential = useCallback((credential) => {
+    navigation.navigate('AddEditCredential', { credential });
+  }, [navigation]);
+
   const renderItem = useCallback(
     ({ item }) => (
-      <CredentialCard item={item} onPress={() => handleViewCredential(item.id)} />
+      <CredentialCard 
+        item={item} 
+        onPress={() => handleViewCredential(item.id)}
+        onEdit={handleEditCredential}
+        onRefresh={refresh}
+      />
     ),
-    [handleViewCredential]
+    [handleViewCredential, handleEditCredential, refresh]
   );
 
   const renderEmpty = useCallback(

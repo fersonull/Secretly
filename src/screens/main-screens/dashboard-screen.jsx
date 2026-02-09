@@ -41,6 +41,10 @@ export default function DashboardScreen() {
     navigation.navigate('AddEditCredential');
   }, [navigation]);
 
+  const handleEditCredential = useCallback((credential) => {
+    navigation.navigate('AddEditCredential', { credential });
+  }, [navigation]);
+
   const handleViewAll = useCallback(() => {
     navigation.navigate('CredentialList');
   }, [navigation]);
@@ -50,9 +54,11 @@ export default function DashboardScreen() {
       <CredentialCard
         item={item}
         onPress={() => handleViewCredential(item.id)}
+        onEdit={handleEditCredential}
+        onRefresh={onRefresh}
       />
     ),
-    [handleViewCredential],
+    [handleViewCredential, handleEditCredential, onRefresh],
   );
 
   const renderHeader = useCallback(
