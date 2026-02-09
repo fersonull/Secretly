@@ -20,7 +20,7 @@ export default function CustomDrawerContent(props) {
           Securely store your credentials
         </Text>
       </View>
-      <View className="flex-1 px-4 pt-3">
+      <View className="flex-1 px-4 py-3">
         <DrawerItemList {...props} />
       </View>
       <View className="px-6 py-5 border-t border-border dark:border-dark-border">

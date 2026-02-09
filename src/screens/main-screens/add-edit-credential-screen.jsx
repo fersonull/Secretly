@@ -47,7 +47,7 @@ export default function AddEditCredentialScreen() {
         </Text>
       </TouchableOpacity>
     ),
-    [generatePassword]
+    [generatePassword],
   );
 
   return (
