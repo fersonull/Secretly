@@ -31,24 +31,24 @@ export default function AddCategoryModal({ visible, onClose, onAdd }) {
   };
 
   return (
-    <IosBottomSheet visible={visible} onClose={onClose} height={500}>
-      <View className="px-6 py-4">
-        <Text className="text-foreground dark:text-dark-foreground font-sans-bold text-xl mb-1">
+    <IosBottomSheet visible={visible} onClose={onClose} height={450}>
+      <View className="p-4">
+        <Text className="text-foreground dark:text-dark-foreground font-sans-bold text-lg mb-1">
           Add Custom Category
         </Text>
-        <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm mb-6">
+        <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm mb-4">
           Create your own category for organizing credentials
         </Text>
 
         {/* Category Name */}
-        <View className="mb-6">
+        <View className="mb-4">
           <Text className="text-foreground-secondary dark:text-dark-foreground-secondary font-sans-medium text-sm mb-2">
             Category Name
           </Text>
           <View className="bg-background-muted dark:bg-dark-background-muted border border-border dark:border-dark-border rounded-lg flex-row items-center px-3">
-            <Lucide name="tag" size={20} color="#71717A" />
+            <Lucide name="tag" size={18} color="#71717A" />
             <TextInput
-              className="flex-1 py-3 px-3 text-foreground dark:text-dark-foreground font-sans"
+              className="flex-1 py-2.5 px-3 text-foreground dark:text-dark-foreground font-sans"
               placeholder="e.g., Gaming, Travel, Medical"
               placeholderTextColor="#71717A"
               value={categoryName}
@@ -59,16 +59,16 @@ export default function AddCategoryModal({ visible, onClose, onAdd }) {
         </View>
 
         {/* Icon Selector */}
-        <View className="mb-6">
-          <Text className="text-foreground-secondary dark:text-dark-foreground-secondary font-sans-medium text-sm mb-3">
+        <View className="mb-4">
+          <Text className="text-foreground-secondary dark:text-dark-foreground-secondary font-sans-medium text-sm mb-2">
             Choose Icon
           </Text>
-          <View className="flex-row flex-wrap gap-2">
+          <View className="flex-row flex-wrap" style={{ gap: 8 }}>
             {ICON_OPTIONS.map(icon => (
               <TouchableOpacity
                 key={icon}
                 onPress={() => setSelectedIcon(icon)}
-                className={`w-12 h-12 rounded-lg items-center justify-center ${
+                className={`w-10 h-10 rounded-lg items-center justify-center ${
                   selectedIcon === icon
                     ? 'bg-primary'
                     : 'bg-background-secondary dark:bg-dark-background-secondary'
@@ -76,7 +76,7 @@ export default function AddCategoryModal({ visible, onClose, onAdd }) {
               >
                 <Lucide
                   name={icon}
-                  size={20}
+                  size={18}
                   color={selectedIcon === icon ? '#FFFFFF' : '#71717A'}
                 />
               </TouchableOpacity>
@@ -85,12 +85,12 @@ export default function AddCategoryModal({ visible, onClose, onAdd }) {
         </View>
 
         {/* Actions */}
-        <View className="flex-row gap-3">
+        <View className="flex-row" style={{ gap: 12 }}>
           <TouchableOpacity
             onPress={onClose}
             className="flex-1 bg-background-secondary dark:bg-dark-background-secondary rounded-lg py-3 items-center border border-border dark:border-dark-border"
           >
-            <Text className="text-foreground dark:text-dark-foreground font-sans-medium text-base">
+            <Text className="text-foreground dark:text-dark-foreground font-sans-medium">
               Cancel
             </Text>
           </TouchableOpacity>
@@ -100,7 +100,7 @@ export default function AddCategoryModal({ visible, onClose, onAdd }) {
             disabled={!categoryName.trim()}
             style={{ opacity: categoryName.trim() ? 1 : 0.5 }}
           >
-            <Text className="text-white font-sans-medium text-base">Add Category</Text>
+            <Text className="text-white font-sans-medium">Add Category</Text>
           </TouchableOpacity>
         </View>
       </View>

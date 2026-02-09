@@ -34,6 +34,7 @@ export const credentialsStorage = {
         ...credentialData,
         id: Date.now().toString(),
         userId,
+        isFavorite: false,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -115,6 +116,34 @@ export const credentialsStorage = {
       );
     } catch (error) {
       console.error('Error searching credentials:', error);
+      return [];
+    }
+  },
+
+  async toggleFavorite(userId, credentialId) {
+    try {
+      const credential = await this.getCredentialById(userId, credentialId);
+      if (!credential) {
+        return { success: false, error: 'Credential not found' };
+      }
+
+      const result = await this.updateCredential(userId, credentialId, {
+        isFavorite: !credential.isFavorite,
+      });
+
+      return result;
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      return { success: false, error: 'Failed to toggle favorite' };
+    }
+  },
+
+  async getFavoriteCredentials(userId) {
+    try {
+      const credentials = await this.getAllCredentials(userId);
+      return credentials.filter(c => c.isFavorite);
+    } catch (error) {
+      console.error('Error getting favorite credentials:', error);
       return [];
     }
   },

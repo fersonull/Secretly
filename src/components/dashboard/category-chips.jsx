@@ -1,17 +1,15 @@
 import Lucide from '@react-native-vector-icons/lucide';
 import { ScrollView, TouchableOpacity, Text } from 'react-native';
-
-const CATEGORIES = [
-  { id: 'all', label: 'All', icon: 'grid-2x2' },
-  { id: 'social', label: 'Social', icon: 'share-2' },
-  { id: 'banking', label: 'Banking', icon: 'landmark' },
-  { id: 'email', label: 'Email', icon: 'mail' },
-  { id: 'shopping', label: 'Shopping', icon: 'shopping-cart' },
-  { id: 'work', label: 'Work', icon: 'briefcase' },
-  { id: 'other', label: 'Other', icon: 'key' },
-];
+import { useCategories } from '../../hooks/use-categories';
 
 export default function CategoryChips({ selected, onSelect, categoryCount }) {
+  const { categories } = useCategories();
+  // Add "All" option to the beginning of the categories list
+  const allCategories = [
+    { id: 'all', label: 'All', icon: 'grid-2x2' },
+    ...categories,
+  ];
+
   return (
     <ScrollView
       horizontal
@@ -19,7 +17,7 @@ export default function CategoryChips({ selected, onSelect, categoryCount }) {
       contentContainerClassName="gap-3"
       className="py-3 "
     >
-      {CATEGORIES.map(category => {
+      {allCategories.map(category => {
         const count =
           category.id === 'all' ? null : categoryCount[category.id] || 0;
         const isSelected = selected === category.id;
