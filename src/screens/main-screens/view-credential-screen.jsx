@@ -1,8 +1,12 @@
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Lucide from '@react-native-vector-icons/lucide';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import IosAlert from '../../components/ui/ios-alert';
+import IosToast from '../../components/ui/ios-toast';
+import { useToast } from '../../hooks/use-toast';
+import { useAlert } from '../../hooks/use-alert';
 
 const MOCK_CREDENTIAL = {
   id: '1',
@@ -21,10 +25,12 @@ export default function ViewCredentialScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const [showPassword, setShowPassword] = useState(false);
+  const { toast, showToast, hideToast } = useToast();
+  const { alert, showAlert, hideAlert } = useAlert();
 
   const copyToClipboard = (text, label) => {
-    //  Clipboard.setString(text)
-    Alert.alert('Copied', `${label} copied to clipboard`);
+    // In production, use Clipboard.setString(text)
+    showToast('success', `${label} copied to clipboard`);
   };
 
   const handleEdit = () => {
@@ -32,20 +38,21 @@ export default function ViewCredentialScreen() {
   };
 
   const handleDelete = () => {
-    Alert.alert(
+    showAlert(
       'Delete Credential',
       'Are you sure you want to delete this credential? This action cannot be undone.',
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: 'Cancel', style: 'cancel', onPress: hideAlert },
         {
           text: 'Delete',
           style: 'destructive',
           onPress: () => {
-            // Delete logic here
+            hideAlert();
             navigation.goBack();
+            showToast('success', 'Credential deleted successfully');
           },
         },
-      ],
+      ]
     );
   };
 
@@ -197,6 +204,22 @@ export default function ViewCredentialScreen() {
           </View>
         </View>
       </ScrollView>
+
+      <IosAlert
+        visible={alert.visible}
+        title={alert.title}
+        message={alert.message}
+        buttons={alert.buttons}
+        onClose={hideAlert}
+      />
+
+      <IosToast
+        visible={toast.visible}
+        type={toast.type}
+        message={toast.message}
+        duration={toast.duration}
+        onHide={hideToast}
+      />
     </SafeAreaView>
   );
 }

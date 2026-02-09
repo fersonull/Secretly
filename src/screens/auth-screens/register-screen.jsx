@@ -16,10 +16,19 @@ import { GroupInput } from '../../components/ui/group-input';
 import { Logo } from '../../components/common/logo';
 import { IconLogo } from '../../components/common/icon-logo';
 import PasswordStrengthMeter from '../../components/ui/password-strength-meter';
+import IosAlert from '../../components/ui/ios-alert';
+import IosToast from '../../components/ui/ios-toast';
+import IosLoading from '../../components/ui/ios-loading';
 import { useTheme } from '@react-navigation/native';
+import { useAuth } from '../../context/auth-context';
+import { useToast } from '../../hooks/use-toast';
+import { useAlert } from '../../hooks/use-alert';
 
 const LoginScreen = ({ navigation }) => {
   const theme = useTheme();
+  const { register } = useAuth();
+  const { toast, showToast, hideToast } = useToast();
+  const { alert, showAlert, hideAlert } = useAlert();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,12 +36,31 @@ const LoginScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRegister = async () => {
-    setIsLoading(true);
+    if (!email.trim() || !password.trim()) {
+      showAlert('Validation Error', 'Please enter both email and password', [
+        { text: 'OK', onPress: hideAlert },
+      ]);
+      return;
+    }
 
-    setTimeout(() => {
-      setIsLoading(false);
-      // navigation.navigate('Main');
-    }, 1000);
+    if (password.length < 8) {
+      showAlert('Weak Password', 'Password must be at least 8 characters long', [
+        { text: 'OK', onPress: hideAlert },
+      ]);
+      return;
+    }
+
+    setIsLoading(true);
+    const result = await register(email, password);
+    setIsLoading(false);
+
+    if (result.success) {
+      showToast('success', 'Account created! Welcome aboard.');
+    } else {
+      showAlert('Registration Failed', result.error || 'An error occurred', [
+        { text: 'Try Again', onPress: hideAlert },
+      ]);
+    }
   };
 
   return (
@@ -194,6 +222,24 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <IosAlert
+        visible={alert.visible}
+        title={alert.title}
+        message={alert.message}
+        buttons={alert.buttons}
+        onClose={hideAlert}
+      />
+
+      <IosToast
+        visible={toast.visible}
+        type={toast.type}
+        message={toast.message}
+        duration={toast.duration}
+        onHide={hideToast}
+      />
+
+      <IosLoading visible={isLoading} message="Creating account..." />
     </SafeAreaView>
   );
 };

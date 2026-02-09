@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useCallback, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Lucide from '@react-native-vector-icons/lucide';
@@ -8,12 +8,18 @@ import CredentialFormHeader from '../../components/credential/credential-form-he
 import CategorySelector from '../../components/credential/category-selector';
 import FormInput from '../../components/credential/form-input';
 import PasswordStrengthMeter from '../../components/ui/password-strength-meter';
+import IosAlert from '../../components/ui/ios-alert';
+import IosToast from '../../components/ui/ios-toast';
+import { useToast } from '../../hooks/use-toast';
+import { useAlert } from '../../hooks/use-alert';
 
 export default function AddEditCredentialScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const isEdit = !!route.params?.id;
   const [showUrlField, setShowUrlField] = useState(false);
+  const { toast, showToast, hideToast } = useToast();
+  const { alert, showAlert, hideAlert } = useAlert();
 
   const {
     formData,
@@ -28,10 +34,21 @@ export default function AddEditCredentialScreen() {
     if (!validateForm()) return;
 
     // Save logic here
-    Alert.alert('Success', 'Credential saved successfully', [
-      { text: 'OK', onPress: () => navigation.goBack() },
-    ]);
-  }, [validateForm, navigation]);
+    showAlert(
+      'Success',
+      `Credential ${isEdit ? 'updated' : 'saved'} successfully`,
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            hideAlert();
+            navigation.goBack();
+            showToast('success', `Credential ${isEdit ? 'updated' : 'added'} successfully!`);
+          },
+        },
+      ]
+    );
+  }, [validateForm, navigation, isEdit, showAlert, hideAlert, showToast]);
 
   const handleClose = useCallback(() => {
     navigation.goBack();
@@ -153,6 +170,22 @@ export default function AddEditCredentialScreen() {
           </View>
         </View>
       </ScrollView>
+
+      <IosAlert
+        visible={alert.visible}
+        title={alert.title}
+        message={alert.message}
+        buttons={alert.buttons}
+        onClose={hideAlert}
+      />
+
+      <IosToast
+        visible={toast.visible}
+        type={toast.type}
+        message={toast.message}
+        duration={toast.duration}
+        onHide={hideToast}
+      />
     </SafeAreaView>
   );
 }

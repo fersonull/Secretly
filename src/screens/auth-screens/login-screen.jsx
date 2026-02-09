@@ -15,10 +15,19 @@ import { Divider } from '../../components/ui/divider';
 import { GroupInput } from '../../components/ui/group-input';
 import { Logo } from '../../components/common/logo';
 import { IconLogo } from '../../components/common/icon-logo';
+import IosAlert from '../../components/ui/ios-alert';
+import IosToast from '../../components/ui/ios-toast';
+import IosLoading from '../../components/ui/ios-loading';
 import { useTheme } from '@react-navigation/native';
+import { useAuth } from '../../context/auth-context';
+import { useToast } from '../../hooks/use-toast';
+import { useAlert } from '../../hooks/use-alert';
 
 const LoginScreen = ({ navigation }) => {
   const theme = useTheme();
+  const { login } = useAuth();
+  const { toast, showToast, hideToast } = useToast();
+  const { alert, showAlert, hideAlert } = useAlert();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,12 +35,24 @@ const LoginScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
-    setIsLoading(true);
+    if (!email.trim() || !password.trim()) {
+      showAlert('Validation Error', 'Please enter both email and password', [
+        { text: 'OK', onPress: hideAlert },
+      ]);
+      return;
+    }
 
-    setTimeout(() => {
-      setIsLoading(false);
-      navigation.navigate('Main');
-    }, 1000);
+    setIsLoading(true);
+    const result = await login(email, password);
+    setIsLoading(false);
+
+    if (result.success) {
+      showToast('success', 'Login successful! Welcome back.');
+    } else {
+      showAlert('Login Failed', result.error || 'An error occurred', [
+        { text: 'Try Again', onPress: hideAlert },
+      ]);
+    }
   };
 
   return (
@@ -165,6 +186,24 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <IosAlert
+        visible={alert.visible}
+        title={alert.title}
+        message={alert.message}
+        buttons={alert.buttons}
+        onClose={hideAlert}
+      />
+
+      <IosToast
+        visible={toast.visible}
+        type={toast.type}
+        message={toast.message}
+        duration={toast.duration}
+        onHide={hideToast}
+      />
+
+      <IosLoading visible={isLoading} message="Signing in..." />
     </SafeAreaView>
   );
 };
