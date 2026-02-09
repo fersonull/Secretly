@@ -11,7 +11,8 @@ const MOCK_CREDENTIAL = {
   password: 'SuperSecret123!@#',
   category: 'social',
   url: 'https://facebook.com',
-  notes: 'Personal Facebook account. Used for keeping in touch with family and friends.',
+  notes:
+    'Personal Facebook account. Used for keeping in touch with family and friends.',
   createdAt: '2024-01-15',
   updatedAt: '2024-02-01',
 };
@@ -22,7 +23,7 @@ export default function ViewCredentialScreen() {
   const [showPassword, setShowPassword] = useState(false);
 
   const copyToClipboard = (text, label) => {
-    // In production, use Clipboard.setString(text)
+    //  Clipboard.setString(text)
     Alert.alert('Copied', `${label} copied to clipboard`);
   };
 
@@ -44,7 +45,7 @@ export default function ViewCredentialScreen() {
             navigation.goBack();
           },
         },
-      ]
+      ],
     );
   };
 
@@ -66,7 +67,7 @@ export default function ViewCredentialScreen() {
             onPress={handleEdit}
             className="w-10 h-10 items-center justify-center"
           >
-            <Lucide name="edit-2" size={20} color="#3B82F6" />
+            <Lucide name="pencil" size={20} color="#3B82F6" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleDelete}
@@ -87,7 +88,8 @@ export default function ViewCredentialScreen() {
             {MOCK_CREDENTIAL.title}
           </Text>
           <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm">
-            {MOCK_CREDENTIAL.category.charAt(0).toUpperCase() + MOCK_CREDENTIAL.category.slice(1)}
+            {MOCK_CREDENTIAL.category.charAt(0).toUpperCase() +
+              MOCK_CREDENTIAL.category.slice(1)}
           </Text>
         </View>
 
@@ -103,7 +105,9 @@ export default function ViewCredentialScreen() {
                 {MOCK_CREDENTIAL.username}
               </Text>
               <TouchableOpacity
-                onPress={() => copyToClipboard(MOCK_CREDENTIAL.username, 'Username')}
+                onPress={() =>
+                  copyToClipboard(MOCK_CREDENTIAL.username, 'Username')
+                }
                 className="ml-3"
               >
                 <Lucide name="copy" size={18} color="#3B82F6" />
@@ -132,7 +136,9 @@ export default function ViewCredentialScreen() {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => copyToClipboard(MOCK_CREDENTIAL.password, 'Password')}
+                  onPress={() =>
+                    copyToClipboard(MOCK_CREDENTIAL.password, 'Password')
+                  }
                 >
                   <Lucide name="copy" size={18} color="#3B82F6" />
                 </TouchableOpacity>

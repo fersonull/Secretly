@@ -10,7 +10,7 @@ export function IconLogo() {
       <Lucide
         name="folder-lock"
         size={40}
-        // color={theme.dark ? 'hsl(210, 0%, 100%)' : 'hsl(210 40% 98%)'}
+        color={theme.dark ? 'hsl(210, 0%, 100%)' : 'hsl(210 40% 98%)'}
         // color="hsl(215.4 16.3% 46.9%)"
       />
     </View>
