@@ -19,7 +19,7 @@ export default function CategoryBankingScreen() {
   );
 
   const handleEditCredential = useCallback((credential) => {
-    navigation.navigate('AddEditCredential', { credential });
+    navigation.navigate('AddEditCredential', { id: credential.id });
   }, [navigation]);
 
   const renderItem = useCallback(

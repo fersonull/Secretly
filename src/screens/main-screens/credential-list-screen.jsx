@@ -38,7 +38,7 @@ export default function CredentialListScreen() {
   }, [navigation]);
 
   const handleEditCredential = useCallback((credential) => {
-    navigation.navigate('AddEditCredential', { credential });
+    navigation.navigate('AddEditCredential', { id: credential.id });
   }, [navigation]);
 
   const handleBack = useCallback(() => {
