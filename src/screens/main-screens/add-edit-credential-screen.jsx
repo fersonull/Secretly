@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Alert, TouchableOpacity } from 'react-native';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Lucide from '@react-native-vector-icons/lucide';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,6 +12,7 @@ export default function AddEditCredentialScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const isEdit = !!route.params?.id;
+  const [showUrlField, setShowUrlField] = useState(false);
 
   const {
     formData,
@@ -100,15 +101,37 @@ export default function AddEditCredentialScreen() {
             rightAction={<GenerateButton />}
           />
 
-          <FormInput
-            label="Website URL"
-            icon="globe"
-            value={formData.url}
-            onChangeText={value => updateField('url', value)}
-            placeholder="https://example.com"
-            keyboardType="url"
-            autoCapitalize="none"
-          />
+          {!showUrlField ? (
+            <TouchableOpacity
+              onPress={() => setShowUrlField(true)}
+              className="flex-row items-center mb-4"
+            >
+              <Lucide name="circle-plus" size={20} color="#3B82F6" />
+              <Text className="text-primary font-sans-medium text-sm ml-2">
+                Add Website URL
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <View className="flex-row items-center gap-4">
+              <FormInput
+                label="Website URL"
+                icon="globe"
+                value={formData.url}
+                onChangeText={value => updateField('url', value)}
+                placeholder="https://example.com"
+                keyboardType="url"
+                autoCapitalize="none"
+                className="flex-1"
+              />
+
+              <TouchableOpacity
+                onPress={() => setShowUrlField(false)}
+                className="flex-row items-center"
+              >
+                <Lucide name="square-slash" size={20} color="#EF4444" />
+              </TouchableOpacity>
+            </View>
+          )}
 
           <FormInput
             label="Notes"

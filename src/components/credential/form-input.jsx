@@ -16,9 +16,10 @@ export default function FormInput({
   autoCapitalize = 'sentences',
   required = false,
   rightAction,
+  ...props
 }) {
   return (
-    <View className="mb-4">
+    <View className="mb-4" {...props}>
       <View className="flex-row items-center justify-between mb-2">
         <Text className="text-foreground-secondary dark:text-dark-foreground-secondary font-sans-medium text-sm">
           {label} {required && '*'}
