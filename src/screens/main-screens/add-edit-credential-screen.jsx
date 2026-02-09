@@ -1,15 +1,17 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Lucide from '@react-native-vector-icons/lucide';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCredentialForm } from '../../hooks/use-credential-form';
+import { useCredentials } from '../../hooks/use-credentials';
 import CredentialFormHeader from '../../components/credential/credential-form-header';
 import CategorySelector from '../../components/credential/category-selector';
 import FormInput from '../../components/credential/form-input';
 import PasswordStrengthMeter from '../../components/ui/password-strength-meter';
 import IosAlert from '../../components/ui/ios-alert';
 import IosToast from '../../components/ui/ios-toast';
+import IosLoading from '../../components/ui/ios-loading';
 import { useToast } from '../../hooks/use-toast';
 import { useAlert } from '../../hooks/use-alert';
 
@@ -17,9 +19,13 @@ export default function AddEditCredentialScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const isEdit = !!route.params?.id;
+  const credentialId = route.params?.id;
+  
   const [showUrlField, setShowUrlField] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast, showToast, hideToast } = useToast();
   const { alert, showAlert, hideAlert } = useAlert();
+  const { addCredential, updateCredential, getCredentialById } = useCredentials();
 
   const {
     formData,
@@ -30,25 +36,51 @@ export default function AddEditCredentialScreen() {
     validateForm,
   } = useCredentialForm();
 
-  const handleSave = useCallback(() => {
+  useEffect(() => {
+    if (isEdit && credentialId) {
+      const credential = getCredentialById(credentialId);
+      if (credential) {
+        updateField('title', credential.title);
+        updateField('username', credential.username);
+        updateField('password', credential.password);
+        updateField('url', credential.url || '');
+        updateField('notes', credential.notes || '');
+        updateField('category', credential.category);
+        if (credential.url) setShowUrlField(true);
+      }
+    }
+  }, [isEdit, credentialId, getCredentialById]);
+
+  const handleSave = useCallback(async () => {
     if (!validateForm()) return;
 
-    // Save logic here
-    showAlert(
-      'Success',
-      `Credential ${isEdit ? 'updated' : 'saved'} successfully`,
-      [
-        {
-          text: 'OK',
-          onPress: () => {
-            hideAlert();
-            navigation.goBack();
-            showToast('success', `Credential ${isEdit ? 'updated' : 'added'} successfully!`);
-          },
-        },
-      ]
-    );
-  }, [validateForm, navigation, isEdit, showAlert, hideAlert, showToast]);
+    setIsLoading(true);
+    
+    const credentialData = {
+      title: formData.title,
+      username: formData.username,
+      password: formData.password,
+      url: formData.url,
+      notes: formData.notes,
+      category: formData.category,
+      passwordStrength: 'medium', // Calculate this based on password strength
+    };
+
+    const result = isEdit
+      ? await updateCredential(credentialId, credentialData)
+      : await addCredential(credentialData);
+    
+    setIsLoading(false);
+
+    if (result.success) {
+      navigation.goBack();
+      showToast('success', `Credential ${isEdit ? 'updated' : 'added'} successfully!`);
+    } else {
+      showAlert('Error', result.error || 'Failed to save credential', [
+        { text: 'OK', onPress: hideAlert },
+      ]);
+    }
+  }, [validateForm, formData, isEdit, credentialId, addCredential, updateCredential, navigation, showToast, showAlert, hideAlert]);
 
   const handleClose = useCallback(() => {
     navigation.goBack();
@@ -186,6 +218,8 @@ export default function AddEditCredentialScreen() {
         duration={toast.duration}
         onHide={hideToast}
       />
+
+      <IosLoading visible={isLoading} message={isEdit ? 'Updating...' : 'Saving...'} />
     </SafeAreaView>
   );
 }

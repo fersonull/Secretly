@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import Lucide from '@react-native-vector-icons/lucide';
 
 export default function CredentialCard({ item, onPress }) {
-  const getCategoryIcon = (category) => {
+  const getCategoryIcon = category => {
     const icons = {
       social: 'share-2',
       banking: 'landmark',
@@ -13,6 +13,8 @@ export default function CredentialCard({ item, onPress }) {
     };
     return icons[category] || 'key';
   };
+
+  console.log(item);
 
   return (
     <TouchableOpacity

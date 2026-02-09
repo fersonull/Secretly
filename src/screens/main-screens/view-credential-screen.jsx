@@ -1,32 +1,46 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Lucide from '@react-native-vector-icons/lucide';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useCredentials } from '../../hooks/use-credentials';
 import IosAlert from '../../components/ui/ios-alert';
 import IosToast from '../../components/ui/ios-toast';
+import IosLoading from '../../components/ui/ios-loading';
 import { useToast } from '../../hooks/use-toast';
 import { useAlert } from '../../hooks/use-alert';
-
-const MOCK_CREDENTIAL = {
-  id: '1',
-  title: 'Facebook',
-  username: 'john.doe@email.com',
-  password: 'SuperSecret123!@#',
-  category: 'social',
-  url: 'https://facebook.com',
-  notes:
-    'Personal Facebook account. Used for keeping in touch with family and friends.',
-  createdAt: '2024-01-15',
-  updatedAt: '2024-02-01',
-};
 
 export default function ViewCredentialScreen() {
   const navigation = useNavigation();
   const route = useRoute();
+  const credentialId = route.params?.id;
+
   const [showPassword, setShowPassword] = useState(false);
+  const [credential, setCredential] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast, showToast, hideToast } = useToast();
   const { alert, showAlert, hideAlert } = useAlert();
+  const {
+    credentials,
+    getCredentialById,
+    deleteCredential,
+    isLoading: credentialsLoading,
+  } = useCredentials();
+
+  useEffect(() => {
+    // Only try to get credential after credentials are loaded
+    if (!credentialsLoading && credentialId) {
+      const data = getCredentialById(credentialId);
+      console.log('Credential data:', data);
+      setCredential(data);
+
+      if (!data) {
+        showAlert('Error', 'Credential not found', [
+          { text: 'OK', onPress: () => navigation.goBack() },
+        ]);
+      }
+    }
+  }, [credentialId, credentials, credentialsLoading, getCredentialById]);
 
   const copyToClipboard = (text, label) => {
     // In production, use Clipboard.setString(text)
@@ -34,7 +48,7 @@ export default function ViewCredentialScreen() {
   };
 
   const handleEdit = () => {
-    navigation.navigate('AddEditCredential', { id: MOCK_CREDENTIAL.id });
+    navigation.navigate('AddEditCredential', { id: credentialId });
   };
 
   const handleDelete = () => {
@@ -46,15 +60,39 @@ export default function ViewCredentialScreen() {
         {
           text: 'Delete',
           style: 'destructive',
-          onPress: () => {
+          onPress: async () => {
             hideAlert();
-            navigation.goBack();
-            showToast('success', 'Credential deleted successfully');
+            setIsLoading(true);
+            const result = await deleteCredential(credentialId);
+            setIsLoading(false);
+
+            if (result.success) {
+              navigation.goBack();
+              showToast('success', 'Credential deleted successfully');
+            } else {
+              showAlert(
+                'Error',
+                result.error || 'Failed to delete credential',
+                [{ text: 'OK', onPress: hideAlert }],
+              );
+            }
           },
         },
-      ]
+      ],
     );
   };
+
+  if (credentialsLoading || !credential) {
+    return (
+      <SafeAreaView className="bg-background dark:bg-dark-background flex-1">
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans">
+            Loading...
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="bg-background dark:bg-dark-background flex-1">
@@ -74,7 +112,7 @@ export default function ViewCredentialScreen() {
             onPress={handleEdit}
             className="w-10 h-10 items-center justify-center"
           >
-            <Lucide name="pencil" size={20} color="#3B82F6" />
+            <Lucide name="edit-2" size={20} color="#3B82F6" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleDelete}
@@ -92,11 +130,11 @@ export default function ViewCredentialScreen() {
             <Lucide name="share-2" size={28} color="#3B82F6" />
           </View>
           <Text className="text-foreground dark:text-dark-foreground font-sans-bold text-2xl mb-1">
-            {MOCK_CREDENTIAL.title}
+            {credential.title}
           </Text>
           <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm">
-            {MOCK_CREDENTIAL.category.charAt(0).toUpperCase() +
-              MOCK_CREDENTIAL.category.slice(1)}
+            {credential.category.charAt(0).toUpperCase() +
+              credential.category.slice(1)}
           </Text>
         </View>
 
@@ -109,12 +147,10 @@ export default function ViewCredentialScreen() {
             </Text>
             <View className="bg-background-muted dark:bg-dark-background-muted border border-border dark:border-dark-border rounded-lg p-4 flex-row items-center justify-between">
               <Text className="text-foreground dark:text-dark-foreground font-sans-medium flex-1">
-                {MOCK_CREDENTIAL.username}
+                {credential.username}
               </Text>
               <TouchableOpacity
-                onPress={() =>
-                  copyToClipboard(MOCK_CREDENTIAL.username, 'Username')
-                }
+                onPress={() => copyToClipboard(credential.username, 'Username')}
                 className="ml-3"
               >
                 <Lucide name="copy" size={18} color="#3B82F6" />
@@ -129,7 +165,7 @@ export default function ViewCredentialScreen() {
             </Text>
             <View className="bg-background-muted dark:bg-dark-background-muted border border-border dark:border-dark-border rounded-lg p-4 flex-row items-center justify-between">
               <Text className="text-foreground dark:text-dark-foreground font-sans-medium flex-1">
-                {showPassword ? MOCK_CREDENTIAL.password : '••••••••••••'}
+                {showPassword ? credential.password : '••••••••••••'}
               </Text>
               <View className="flex-row items-center ml-3">
                 <TouchableOpacity
@@ -144,7 +180,7 @@ export default function ViewCredentialScreen() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() =>
-                    copyToClipboard(MOCK_CREDENTIAL.password, 'Password')
+                    copyToClipboard(credential.password, 'Password')
                   }
                 >
                   <Lucide name="copy" size={18} color="#3B82F6" />
@@ -154,17 +190,17 @@ export default function ViewCredentialScreen() {
           </View>
 
           {/* URL */}
-          {MOCK_CREDENTIAL.url && (
+          {credential.url && (
             <View className="mb-4">
               <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-xs mb-2">
                 WEBSITE URL
               </Text>
               <View className="bg-background-muted dark:bg-dark-background-muted border border-border dark:border-dark-border rounded-lg p-4 flex-row items-center justify-between">
                 <Text className="text-primary dark:text-primary font-sans-medium flex-1">
-                  {MOCK_CREDENTIAL.url}
+                  {credential.url}
                 </Text>
                 <TouchableOpacity
-                  onPress={() => copyToClipboard(MOCK_CREDENTIAL.url, 'URL')}
+                  onPress={() => copyToClipboard(credential.url, 'URL')}
                   className="ml-3"
                 >
                   <Lucide name="external-link" size={18} color="#3B82F6" />
@@ -174,14 +210,14 @@ export default function ViewCredentialScreen() {
           )}
 
           {/* Notes */}
-          {MOCK_CREDENTIAL.notes && (
+          {credential.notes && (
             <View className="mb-4">
               <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-xs mb-2">
                 NOTES
               </Text>
               <View className="bg-background-muted dark:bg-dark-background-muted border border-border dark:border-dark-border rounded-lg p-4">
                 <Text className="text-foreground dark:text-dark-foreground font-sans leading-5">
-                  {MOCK_CREDENTIAL.notes}
+                  {credential.notes}
                 </Text>
               </View>
             </View>
@@ -192,13 +228,13 @@ export default function ViewCredentialScreen() {
             <View className="flex-row items-center mb-2">
               <Lucide name="calendar" size={16} color="#71717A" />
               <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm ml-2">
-                Created: {MOCK_CREDENTIAL.createdAt}
+                Created: {credential.createdAt?.split('T')[0] || 'N/A'}
               </Text>
             </View>
             <View className="flex-row items-center">
               <Lucide name="clock" size={16} color="#71717A" />
               <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm ml-2">
-                Last updated: {MOCK_CREDENTIAL.updatedAt}
+                Last updated: {credential.updatedAt?.split('T')[0] || 'N/A'}
               </Text>
             </View>
           </View>
@@ -220,6 +256,8 @@ export default function ViewCredentialScreen() {
         duration={toast.duration}
         onHide={hideToast}
       />
+
+      <IosLoading visible={isLoading} message="Deleting..." />
     </SafeAreaView>
   );
 }
