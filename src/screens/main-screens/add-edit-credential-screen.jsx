@@ -7,6 +7,7 @@ import { useCredentialForm } from '../../hooks/use-credential-form';
 import CredentialFormHeader from '../../components/credential/credential-form-header';
 import CategorySelector from '../../components/credential/category-selector';
 import FormInput from '../../components/credential/form-input';
+import PasswordStrengthMeter from '../../components/ui/password-strength-meter';
 
 export default function AddEditCredentialScreen() {
   const navigation = useNavigation();
@@ -86,20 +87,23 @@ export default function AddEditCredentialScreen() {
             required
           />
 
-          <FormInput
-            label="Password"
-            icon="lock"
-            value={formData.password}
-            onChangeText={value => updateField('password', value)}
-            placeholder="Enter password"
-            secureTextEntry
-            showPasswordToggle
-            showPassword={showPassword}
-            onTogglePassword={() => setShowPassword(!showPassword)}
-            autoCapitalize="none"
-            required
-            rightAction={<GenerateButton />}
-          />
+          <View className="mb-4">
+            <FormInput
+              label="Password"
+              icon="lock"
+              value={formData.password}
+              onChangeText={value => updateField('password', value)}
+              placeholder="Enter password"
+              secureTextEntry
+              showPasswordToggle
+              showPassword={showPassword}
+              onTogglePassword={() => setShowPassword(!showPassword)}
+              autoCapitalize="none"
+              required
+              rightAction={<GenerateButton />}
+            />
+            <PasswordStrengthMeter password={formData.password} />
+          </View>
 
           {!showUrlField ? (
             <TouchableOpacity

@@ -1,13 +1,14 @@
+import Lucide from '@react-native-vector-icons/lucide';
 import { ScrollView, TouchableOpacity, Text } from 'react-native';
 
 const CATEGORIES = [
-  { id: 'all', label: 'All', icon: '📦' },
-  { id: 'social', label: 'Social', icon: '👥' },
-  { id: 'banking', label: 'Banking', icon: '🏦' },
-  { id: 'email', label: 'Email', icon: '📧' },
-  { id: 'shopping', label: 'Shopping', icon: '🛒' },
-  { id: 'work', label: 'Work', icon: '💼' },
-  { id: 'other', label: 'Other', icon: '🔑' },
+  { id: 'all', label: 'All', icon: 'grid-2x2' },
+  { id: 'social', label: 'Social', icon: 'share-2' },
+  { id: 'banking', label: 'Banking', icon: 'landmark' },
+  { id: 'email', label: 'Email', icon: 'mail' },
+  { id: 'shopping', label: 'Shopping', icon: 'shopping-cart' },
+  { id: 'work', label: 'Work', icon: 'briefcase' },
+  { id: 'other', label: 'Other', icon: 'key' },
 ];
 
 export default function CategoryChips({ selected, onSelect, categoryCount }) {
@@ -19,7 +20,8 @@ export default function CategoryChips({ selected, onSelect, categoryCount }) {
       className="py-3"
     >
       {CATEGORIES.map(category => {
-        const count = category.id === 'all' ? null : categoryCount[category.id] || 0;
+        const count =
+          category.id === 'all' ? null : categoryCount[category.id] || 0;
         const isSelected = selected === category.id;
 
         return (
@@ -33,9 +35,13 @@ export default function CategoryChips({ selected, onSelect, categoryCount }) {
             }`}
             activeOpacity={0.7}
           >
-            <Text className="text-base mr-1.5">{category.icon}</Text>
+            <Lucide
+              name={category.icon}
+              size={16}
+              color={isSelected ? '#FFFFFF' : '#71717A'}
+            />
             <Text
-              className={`font-sans-medium text-sm ${
+              className={`font-sans-medium text-sm ml-2 ${
                 isSelected
                   ? 'text-white'
                   : 'text-foreground dark:text-dark-foreground'
