@@ -1,4 +1,10 @@
-import { View, Text, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  RefreshControl,
+} from 'react-native';
 import { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Lucide from '@react-native-vector-icons/lucide';
@@ -29,7 +35,7 @@ export default function DashboardScreen() {
     id => {
       navigation.navigate('ViewCredential', { id });
     },
-    [navigation]
+    [navigation],
   );
 
   const handleAddCredential = useCallback(() => {
@@ -48,12 +54,16 @@ export default function DashboardScreen() {
         className="flex-1"
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#3B82F6" />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#3B82F6"
+          />
         }
       >
-        <WelcomeHeader />
+        {/* <WelcomeHeader /> */}
 
-        <View className="px-4 pb-2">
+        <View className="px-4 pb-2 mt-4">
           <SearchBar
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -61,7 +71,11 @@ export default function DashboardScreen() {
           />
         </View>
 
-        <StatsCards total={stats.total} strong={stats.strong} weak={stats.weak} />
+        <StatsCards
+          total={stats.total}
+          strong={stats.strong}
+          weak={stats.weak}
+        />
 
         <CategoryChips
           selected={selectedCategory}
@@ -75,7 +89,9 @@ export default function DashboardScreen() {
               Recent Credentials
             </Text>
             <TouchableOpacity onPress={handleViewAll}>
-              <Text className="text-primary font-sans-medium text-sm">View All</Text>
+              <Text className="text-primary font-sans-medium text-sm">
+                View All
+              </Text>
             </TouchableOpacity>
           </View>
 

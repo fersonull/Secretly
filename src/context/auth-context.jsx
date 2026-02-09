@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authStorage } from '../services/auth-storage';
+import { hashPassword, verifyPassword } from '../utils/crypto';
 
 const AuthContext = createContext(null);
 
@@ -28,11 +29,25 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      // Simulate login - replace with actual API call
+      // Find user by email
+      const existingUser = await authStorage.findUserByEmail(email);
+      
+      if (!existingUser) {
+        return { success: false, error: 'No account found with this email' };
+      }
+
+      // Verify password
+      const isPasswordValid = await verifyPassword(password, existingUser.password);
+      
+      if (!isPasswordValid) {
+        return { success: false, error: 'Invalid password' };
+      }
+
+      // Save session
       const userData = {
-        email,
-        name: email.split('@')[0],
-        id: Date.now().toString(),
+        id: existingUser.id,
+        email: existingUser.email,
+        name: existingUser.name,
       };
 
       const saved = await authStorage.saveAuthData(userData);
@@ -41,32 +56,46 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
         return { success: true };
       }
-      return { success: false, error: 'Failed to save user data' };
+      
+      return { success: false, error: 'Failed to save session' };
     } catch (error) {
       console.error('Login error:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: 'An error occurred during login' };
     }
   };
 
   const register = async (email, password) => {
     try {
-      // Simulate registration - replace with actual API call
-      const userData = {
-        email,
-        name: email.split('@')[0],
-        id: Date.now().toString(),
-      };
+      // Hash password
+      const hashedPassword = await hashPassword(password);
+      
+      if (!hashedPassword) {
+        return { success: false, error: 'Failed to secure password' };
+      }
 
-      const saved = await authStorage.saveAuthData(userData);
+      // Extract name from email
+      const name = email.split('@')[0];
+
+      // Register user in storage
+      const result = await authStorage.registerUser(email, hashedPassword, name);
+      
+      if (!result.success) {
+        return result;
+      }
+
+      // Auto-login after registration
+      const saved = await authStorage.saveAuthData(result.user);
+      
       if (saved) {
-        setUser(userData);
+        setUser(result.user);
         setIsAuthenticated(true);
         return { success: true };
       }
-      return { success: false, error: 'Failed to save user data' };
+      
+      return { success: false, error: 'Account created but login failed' };
     } catch (error) {
       console.error('Register error:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: 'An error occurred during registration' };
     }
   };
 
