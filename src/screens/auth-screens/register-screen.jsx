@@ -15,6 +15,7 @@ import { Divider } from '../../components/ui/divider';
 import { GroupInput } from '../../components/ui/group-input';
 import { Logo } from '../../components/common/logo';
 import { IconLogo } from '../../components/common/icon-logo';
+import PasswordStrengthMeter from '../../components/ui/password-strength-meter';
 import { useTheme } from '@react-navigation/native';
 
 const LoginScreen = ({ navigation }) => {
@@ -112,6 +113,7 @@ const LoginScreen = ({ navigation }) => {
                   />
                 </TouchableOpacity>
               </View>
+              <PasswordStrengthMeter password={password} />
             </View>
             <View className="mb-6">
               <Text className="text-sm font-sans-medium text-foreground dark:text-dark-foreground mb-2">
