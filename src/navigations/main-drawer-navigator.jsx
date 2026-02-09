@@ -35,7 +35,7 @@ export default function MainDrawerNavigator() {
         },
       }}
     >
-      <Drawer.Screen name="Dashboard" component={DashboardStackNavigator} />
+      <Drawer.Screen name="Home" component={DashboardStackNavigator} />
       <Drawer.Screen name="Categories" component={CategoryTopTabsNavigator} />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
     </Drawer.Navigator>
