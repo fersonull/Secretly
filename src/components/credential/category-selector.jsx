@@ -1,16 +1,10 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import Lucide from '@react-native-vector-icons/lucide';
+import { useCategories } from '../../hooks/use-categories';
 
-const CATEGORIES = [
-  { id: 'social', label: 'Social Media', icon: 'share-2' },
-  { id: 'banking', label: 'Banking', icon: 'landmark' },
-  { id: 'email', label: 'Email', icon: 'mail' },
-  { id: 'shopping', label: 'Shopping', icon: 'shopping-cart' },
-  { id: 'work', label: 'Work', icon: 'briefcase' },
-  { id: 'other', label: 'Other', icon: 'key' },
-];
+export default function CategorySelector({ selectedCategory, onSelectCategory, onAddCategory }) {
+  const { categories } = useCategories();
 
-export default function CategorySelector({ selectedCategory, onSelectCategory }) {
   return (
     <View className="mb-4">
       <Text className="text-foreground-secondary dark:text-dark-foreground-secondary font-sans-medium text-sm mb-2">
@@ -21,7 +15,7 @@ export default function CategorySelector({ selectedCategory, onSelectCategory })
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 8 }}
       >
-        {CATEGORIES.map(cat => (
+        {categories.map(cat => (
           <TouchableOpacity
             key={cat.id}
             onPress={() => onSelectCategory(cat.id)}
@@ -47,6 +41,17 @@ export default function CategorySelector({ selectedCategory, onSelectCategory })
             </Text>
           </TouchableOpacity>
         ))}
+        
+        {/* Add Custom Category Button */}
+        <TouchableOpacity
+          onPress={onAddCategory}
+          className="flex-row items-center px-4 py-3 rounded-lg border border-dashed border-primary bg-primary/10"
+        >
+          <Lucide name="plus" size={16} color="#3B82F6" />
+          <Text className="text-primary font-sans-medium text-sm ml-2">
+            Add Custom
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );

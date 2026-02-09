@@ -5,10 +5,12 @@ import Lucide from '@react-native-vector-icons/lucide';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCredentialForm } from '../../hooks/use-credential-form';
 import { useCredentials } from '../../hooks/use-credentials';
+import { useCategories } from '../../hooks/use-categories';
 import CredentialFormHeader from '../../components/credential/credential-form-header';
 import CategorySelector from '../../components/credential/category-selector';
 import FormInput from '../../components/credential/form-input';
 import PasswordStrengthMeter from '../../components/ui/password-strength-meter';
+import AddCategoryModal from '../../components/credential/add-category-modal';
 import IosAlert from '../../components/ui/ios-alert';
 import IosToast from '../../components/ui/ios-toast';
 import IosLoading from '../../components/ui/ios-loading';
@@ -23,9 +25,11 @@ export default function AddEditCredentialScreen() {
   
   const [showUrlField, setShowUrlField] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
   const { toast, showToast, hideToast } = useToast();
   const { alert, showAlert, hideAlert } = useAlert();
   const { addCredential, updateCredential, getCredentialById } = useCredentials();
+  const { addCategory } = useCategories();
 
   const {
     formData,
@@ -86,6 +90,20 @@ export default function AddEditCredentialScreen() {
     navigation.goBack();
   }, [navigation]);
 
+  const handleAddCategory = useCallback(async (categoryName, icon) => {
+    const result = await addCategory(categoryName, icon);
+    
+    if (result.success) {
+      setShowCategoryModal(false);
+      updateField('category', result.category.id);
+      showToast('success', 'Custom category added successfully!');
+    } else {
+      showAlert('Error', result.error || 'Failed to add category', [
+        { text: 'OK', onPress: hideAlert },
+      ]);
+    }
+  }, [addCategory, updateField, showToast, showAlert, hideAlert]);
+
   const GenerateButton = useCallback(
     () => (
       <TouchableOpacity
@@ -123,6 +141,7 @@ export default function AddEditCredentialScreen() {
           <CategorySelector
             selectedCategory={formData.category}
             onSelectCategory={value => updateField('category', value)}
+            onAddCategory={() => setShowCategoryModal(true)}
           />
 
           <FormInput
@@ -220,6 +239,12 @@ export default function AddEditCredentialScreen() {
       />
 
       <IosLoading visible={isLoading} message={isEdit ? 'Updating...' : 'Saving...'} />
+
+      <AddCategoryModal
+        visible={showCategoryModal}
+        onClose={() => setShowCategoryModal(false)}
+        onAdd={handleAddCategory}
+      />
     </SafeAreaView>
   );
 }
