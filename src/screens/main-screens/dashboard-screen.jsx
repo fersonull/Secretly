@@ -1,11 +1,16 @@
-import { View, Text, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  RefreshControl,
+} from 'react-native';
 import { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Lucide from '@react-native-vector-icons/lucide';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDashboard } from '../../hooks/use-dashboard';
 import AppHeader from '../../components/common/app-header';
-import WelcomeHeader from '../../components/dashboard/welcome-header';
 import SearchBar from '../../components/credential/search-bar';
 import StatsCards from '../../components/dashboard/stats-cards';
 import CategoryChips from '../../components/dashboard/category-chips';
@@ -29,7 +34,7 @@ export default function DashboardScreen() {
     id => {
       navigation.navigate('ViewCredential', { id });
     },
-    [navigation]
+    [navigation],
   );
 
   const handleAddCredential = useCallback(() => {
@@ -42,52 +47,73 @@ export default function DashboardScreen() {
 
   const renderItem = useCallback(
     ({ item }) => (
-      <CredentialCard item={item} onPress={() => handleViewCredential(item.id)} />
+      <CredentialCard
+        item={item}
+        onPress={() => handleViewCredential(item.id)}
+      />
     ),
-    [handleViewCredential]
+    [handleViewCredential],
   );
 
-  const renderHeader = useCallback(() => (
-    <>
-      <WelcomeHeader />
-
-      <View className="px-4 pb-2">
-        <SearchBar
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholder="Search credentials..."
-        />
-      </View>
-
-      <StatsCards total={stats.total} strong={stats.strong} weak={stats.weak} />
-
-      <CategoryChips
-        selected={selectedCategory}
-        onSelect={setSelectedCategory}
-        categoryCount={categoryCount}
-      />
-
-      <View className="px-4 pt-2">
-        <View className="flex-row items-center justify-between mb-3">
-          <Text className="text-foreground dark:text-dark-foreground font-sans-bold text-lg">
-            Recent Credentials
-          </Text>
-          <TouchableOpacity onPress={handleViewAll}>
-            <Text className="text-primary font-sans-medium text-sm">View All</Text>
-          </TouchableOpacity>
+  const renderHeader = useCallback(
+    () => (
+      <>
+        <View className="pb-2 pt-4">
+          <SearchBar
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholder="Search credentials..."
+          />
         </View>
-      </View>
-    </>
-  ), [searchQuery, setSearchQuery, stats, selectedCategory, setSelectedCategory, categoryCount, handleViewAll]);
 
-  const renderEmpty = useCallback(() => (
-    <View className="py-12 items-center">
-      <Lucide name="search-x" size={48} color="#71717A" />
-      <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm mt-4">
-        No credentials found
-      </Text>
-    </View>
-  ), []);
+        <StatsCards
+          total={stats.total}
+          strong={stats.strong}
+          weak={stats.weak}
+        />
+
+        <CategoryChips
+          selected={selectedCategory}
+          onSelect={setSelectedCategory}
+          categoryCount={categoryCount}
+        />
+
+        <View className="pt-2">
+          <View className="flex-row items-center justify-between mb-3">
+            <Text className="text-foreground dark:text-dark-foreground font-sans-bold text-lg">
+              Recent Credentials
+            </Text>
+            <TouchableOpacity onPress={handleViewAll}>
+              <Text className="text-primary font-sans-medium text-sm">
+                View All
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </>
+    ),
+    [
+      searchQuery,
+      setSearchQuery,
+      stats,
+      selectedCategory,
+      setSelectedCategory,
+      categoryCount,
+      handleViewAll,
+    ],
+  );
+
+  const renderEmpty = useCallback(
+    () => (
+      <View className="py-12 items-center">
+        <Lucide name="search-x" size={48} color="#71717A" />
+        <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm mt-4">
+          No credentials found
+        </Text>
+      </View>
+    ),
+    [],
+  );
 
   return (
     <SafeAreaView className="bg-background dark:bg-dark-background flex-1">
@@ -102,7 +128,11 @@ export default function DashboardScreen() {
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 80 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#3B82F6" />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#3B82F6"
+          />
         }
       />
 

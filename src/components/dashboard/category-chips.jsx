@@ -16,8 +16,8 @@ export default function CategoryChips({ selected, onSelect, categoryCount }) {
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}
-      className="py-3"
+      contentContainerClassName="gap-3"
+      className="py-3 "
     >
       {CATEGORIES.map(category => {
         const count =

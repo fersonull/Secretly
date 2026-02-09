@@ -6,7 +6,7 @@ export default function StatsCards({ total, strong, weak }) {
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingHorizontal: 16, gap: 12 }}
+      contentContainerClassName="gap-3"
       className="py-3"
     >
       <StatCard
