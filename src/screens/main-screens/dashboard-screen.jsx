@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  RefreshControl,
-} from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Lucide from '@react-native-vector-icons/lucide';
@@ -35,7 +29,7 @@ export default function DashboardScreen() {
     id => {
       navigation.navigate('ViewCredential', { id });
     },
-    [navigation],
+    [navigation]
   );
 
   const handleAddCredential = useCallback(() => {
@@ -46,73 +40,71 @@ export default function DashboardScreen() {
     navigation.navigate('CredentialList');
   }, [navigation]);
 
+  const renderItem = useCallback(
+    ({ item }) => (
+      <CredentialCard item={item} onPress={() => handleViewCredential(item.id)} />
+    ),
+    [handleViewCredential]
+  );
+
+  const renderHeader = useCallback(() => (
+    <>
+      <WelcomeHeader />
+
+      <View className="px-4 pb-2">
+        <SearchBar
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          placeholder="Search credentials..."
+        />
+      </View>
+
+      <StatsCards total={stats.total} strong={stats.strong} weak={stats.weak} />
+
+      <CategoryChips
+        selected={selectedCategory}
+        onSelect={setSelectedCategory}
+        categoryCount={categoryCount}
+      />
+
+      <View className="px-4 pt-2">
+        <View className="flex-row items-center justify-between mb-3">
+          <Text className="text-foreground dark:text-dark-foreground font-sans-bold text-lg">
+            Recent Credentials
+          </Text>
+          <TouchableOpacity onPress={handleViewAll}>
+            <Text className="text-primary font-sans-medium text-sm">View All</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
+  ), [searchQuery, setSearchQuery, stats, selectedCategory, setSelectedCategory, categoryCount, handleViewAll]);
+
+  const renderEmpty = useCallback(() => (
+    <View className="py-12 items-center">
+      <Lucide name="search-x" size={48} color="#71717A" />
+      <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm mt-4">
+        No credentials found
+      </Text>
+    </View>
+  ), []);
+
   return (
     <SafeAreaView className="bg-background dark:bg-dark-background flex-1">
       <AppHeader title="Dashboard" />
 
-      <ScrollView
-        className="flex-1"
+      <FlatList
+        data={credentials}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+        ListHeaderComponent={renderHeader}
+        ListEmptyComponent={renderEmpty}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 80 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor="#3B82F6"
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#3B82F6" />
         }
-      >
-        {/* <WelcomeHeader /> */}
-
-        <View className="px-4 pb-2 mt-4">
-          <SearchBar
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            placeholder="Search credentials..."
-          />
-        </View>
-
-        <StatsCards
-          total={stats.total}
-          strong={stats.strong}
-          weak={stats.weak}
-        />
-
-        <CategoryChips
-          selected={selectedCategory}
-          onSelect={setSelectedCategory}
-          categoryCount={categoryCount}
-        />
-
-        <View className="px-4 pb-24">
-          <View className="flex-row items-center justify-between mb-3">
-            <Text className="text-foreground dark:text-dark-foreground font-sans-bold text-lg">
-              Recent Credentials
-            </Text>
-            <TouchableOpacity onPress={handleViewAll}>
-              <Text className="text-primary font-sans-medium text-sm">
-                View All
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {credentials.map(item => (
-            <CredentialCard
-              key={item.id}
-              item={item}
-              onPress={() => handleViewCredential(item.id)}
-            />
-          ))}
-
-          {credentials.length === 0 && (
-            <View className="py-12 items-center">
-              <Lucide name="search-x" size={48} color="#71717A" />
-              <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-sm mt-4">
-                No credentials found
-              </Text>
-            </View>
-          )}
-        </View>
-      </ScrollView>
+      />
 
       <TouchableOpacity
         onPress={handleAddCredential}
