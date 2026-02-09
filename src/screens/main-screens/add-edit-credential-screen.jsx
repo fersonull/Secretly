@@ -39,7 +39,7 @@ export default function AddEditCredentialScreen() {
     let generatedPassword = '';
     for (let i = 0; i < 16; i++) {
       generatedPassword += chars.charAt(
-        Math.floor(Math.random() * chars.length)
+        Math.floor(Math.random() * chars.length),
       );
     }
     setPassword(generatedPassword);
@@ -174,7 +174,7 @@ export default function AddEditCredentialScreen() {
                 onPress={generatePassword}
                 className="flex-row items-center"
               >
-                <Lucide name="wand-2" size={16} color="#3B82F6" />
+                <Lucide name="wand" size={16} color="#3B82F6" />
                 <Text className="text-primary font-sans-medium text-sm ml-1">
                   Generate
                 </Text>
