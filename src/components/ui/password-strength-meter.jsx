@@ -1,44 +1,6 @@
 import { View, Text } from 'react-native';
 import { useMemo } from 'react';
-
-const calculatePasswordStrength = password => {
-  if (!password) return { score: 0, label: '', color: '' };
-
-  let score = 0;
-  const checks = {
-    length: password.length >= 8,
-    hasLower: /[a-z]/.test(password),
-    hasUpper: /[A-Z]/.test(password),
-    hasNumber: /\d/.test(password),
-    hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-  };
-
-  // Length check
-  if (password.length >= 8) score += 1;
-  if (password.length >= 12) score += 1;
-  if (password.length >= 16) score += 1;
-
-  // Character variety
-  if (checks.hasLower) score += 1;
-  if (checks.hasUpper) score += 1;
-  if (checks.hasNumber) score += 1;
-  if (checks.hasSpecial) score += 1;
-
-  // Determine strength
-  let strength = { score: 0, label: 'Very Weak', color: '#EF4444', barColor: 'bg-danger' };
-  
-  if (score >= 7) {
-    strength = { score: 4, label: 'Very Strong', color: '#10B981', barColor: 'bg-success' };
-  } else if (score >= 5) {
-    strength = { score: 3, label: 'Strong', color: '#22C55E', barColor: 'bg-success' };
-  } else if (score >= 3) {
-    strength = { score: 2, label: 'Medium', color: '#F59E0B', barColor: 'bg-warning' };
-  } else if (score >= 1) {
-    strength = { score: 1, label: 'Weak', color: '#EF4444', barColor: 'bg-danger' };
-  }
-
-  return { ...strength, checks };
-};
+import { calculatePasswordStrength } from '../../utils/password-strength';
 
 export default function PasswordStrengthMeter({ password }) {
   const strength = useMemo(() => calculatePasswordStrength(password), [password]);

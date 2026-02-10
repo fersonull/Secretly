@@ -1,23 +1,21 @@
 import { ScrollView, TouchableOpacity, Text } from 'react-native';
-
-const FILTER_OPTIONS = [
-  { id: 'all', label: 'All' },
-  { id: 'social', label: 'Social' },
-  { id: 'banking', label: 'Banking' },
-  { id: 'email', label: 'Email' },
-  { id: 'shopping', label: 'Shopping' },
-  { id: 'work', label: 'Work' },
-  { id: 'other', label: 'Other' },
-];
+import { useCategories } from '../../hooks/use-categories';
 
 export default function FilterChips({ selected, onSelect, categoryCount }) {
+  const { categories } = useCategories();
+  
+  // Add "All" option to the beginning of the categories list
+  const filterOptions = [
+    { id: 'all', label: 'All' },
+    ...categories,
+  ];
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerClassName="gap-2 px-4"
     >
-      {FILTER_OPTIONS.map(option => {
+      {filterOptions.map(option => {
         const count =
           option.id === 'all' ? null : categoryCount[option.id] || 0;
         const isSelected = selected === option.id;

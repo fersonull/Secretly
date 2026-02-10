@@ -3,18 +3,28 @@ import { useEffect, useRef } from 'react';
 import Lucide from '@react-native-vector-icons/lucide';
 
 const ICONS = {
-  success: { name: 'check-circle', color: '#10B981' },
-  error: { name: 'x-circle', color: '#EF4444' },
-  warning: { name: 'alert-circle', color: '#F59E0B' },
+  success: { name: 'circle-check', color: '#10B981' },
+  error: { name: 'circle-x', color: '#EF4444' },
+  warning: { name: 'circle-alert', color: '#F59E0B' },
   info: { name: 'info', color: '#3B82F6' },
 };
 
-export default function IosToast({ visible, type = 'success', message, duration = 3000, onHide }) {
+export default function IosToast({
+  visible,
+  type = 'success',
+  message,
+  duration = 3000,
+  onHide,
+}) {
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(-20)).current;
 
   useEffect(() => {
     if (visible) {
+      // Reset animation values
+      opacity.setValue(0);
+      translateY.setValue(-20);
+
       Animated.parallel([
         Animated.timing(opacity, {
           toValue: 1,
@@ -47,6 +57,10 @@ export default function IosToast({ visible, type = 'success', message, duration 
       }, duration);
 
       return () => clearTimeout(timer);
+    } else {
+      // Reset animation values when not visible
+      opacity.setValue(0);
+      translateY.setValue(-20);
     }
   }, [visible, duration, opacity, translateY, onHide]);
 

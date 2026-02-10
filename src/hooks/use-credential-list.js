@@ -1,79 +1,14 @@
 import { useState, useMemo } from 'react';
-
-const MOCK_CREDENTIALS = [
-  {
-    id: '1',
-    title: 'Facebook',
-    username: 'john.doe@email.com',
-    category: 'social',
-    url: 'https://facebook.com',
-    updatedAt: '2024-02-01',
-  },
-  {
-    id: '2',
-    title: 'Chase Bank',
-    username: 'johndoe',
-    category: 'banking',
-    url: 'https://chase.com',
-    updatedAt: '2024-01-28',
-  },
-  {
-    id: '3',
-    title: 'Gmail',
-    username: 'john.doe@gmail.com',
-    category: 'email',
-    url: 'https://gmail.com',
-    updatedAt: '2024-02-05',
-  },
-  {
-    id: '4',
-    title: 'Amazon',
-    username: 'john_doe',
-    category: 'shopping',
-    url: 'https://amazon.com',
-    updatedAt: '2024-01-15',
-  },
-  {
-    id: '5',
-    title: 'LinkedIn',
-    username: 'john-doe',
-    category: 'social',
-    url: 'https://linkedin.com',
-    updatedAt: '2024-02-03',
-  },
-  {
-    id: '6',
-    title: 'Work Email',
-    username: 'john.doe@company.com',
-    category: 'work',
-    url: 'https://outlook.office.com',
-    updatedAt: '2024-01-20',
-  },
-  {
-    id: '7',
-    title: 'Twitter',
-    username: '@johndoe',
-    category: 'social',
-    url: 'https://twitter.com',
-    updatedAt: '2024-01-25',
-  },
-  {
-    id: '8',
-    title: 'Netflix',
-    username: 'john.doe@email.com',
-    category: 'shopping',
-    url: 'https://netflix.com',
-    updatedAt: '2024-01-10',
-  },
-];
+import { useCredentials } from './use-credentials';
 
 export const useCredentialList = () => {
+  const { credentials: allCredentials } = useCredentials();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('recent');
 
   const filteredAndSortedCredentials = useMemo(() => {
-    let filtered = MOCK_CREDENTIALS;
+    let filtered = allCredentials;
 
     // Filter by search query
     if (searchQuery.trim()) {
@@ -108,14 +43,14 @@ export const useCredentialList = () => {
     });
 
     return sorted;
-  }, [searchQuery, selectedCategory, sortBy]);
+  }, [allCredentials, searchQuery, selectedCategory, sortBy]);
 
   const categoryCount = useMemo(() => {
-    return MOCK_CREDENTIALS.reduce((acc, item) => {
+    return allCredentials.reduce((acc, item) => {
       acc[item.category] = (acc[item.category] || 0) + 1;
       return acc;
     }, {});
-  }, []);
+  }, [allCredentials]);
 
   return {
     credentials: filteredAndSortedCredentials,
@@ -126,6 +61,6 @@ export const useCredentialList = () => {
     sortBy,
     setSortBy,
     categoryCount,
-    totalCount: MOCK_CREDENTIALS.length,
+    totalCount: allCredentials.length,
   };
 };

@@ -1,9 +1,21 @@
-import { View, Modal, Pressable, Animated, PanResponder, Dimensions } from 'react-native';
+import {
+  View,
+  Modal,
+  Pressable,
+  Animated,
+  PanResponder,
+  Dimensions,
+} from 'react-native';
 import { useRef, useEffect } from 'react';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-export default function IosBottomSheet({ visible, onClose, children, height = 'auto' }) {
+export default function IosBottomSheet({
+  visible,
+  onClose,
+  children,
+  height = 'auto',
+}) {
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
   const panResponder = useRef(
     PanResponder.create({
@@ -24,7 +36,7 @@ export default function IosBottomSheet({ visible, onClose, children, height = 'a
           }).start();
         }
       },
-    })
+    }),
   ).current;
 
   const openSheet = () => {
@@ -56,26 +68,21 @@ export default function IosBottomSheet({ visible, onClose, children, height = 'a
 
   return (
     <Modal visible={visible} transparent animationType="fade">
-      <Pressable className="flex-1 bg-black/40" onPress={closeSheet}>
-        <Pressable onPress={e => e.stopPropagation()}>
-          <Animated.View
-            style={{
-              transform: [{ translateY }],
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: height === 'auto' ? 'auto' : height,
-            }}
-            className="bg-background dark:bg-dark-background rounded-t-3xl overflow-hidden"
-          >
-            <View {...panResponder.panHandlers} className="items-center py-2">
-              <View className="w-10 h-1 rounded-full bg-foreground-muted dark:bg-dark-foreground-muted opacity-30" />
-            </View>
-            {children}
-          </Animated.View>
-        </Pressable>
-      </Pressable>
+      <View className="flex-1 bg-black/40">
+        <Pressable className="flex-1" onPress={closeSheet} />
+        <Animated.View
+          style={{
+            transform: [{ translateY }],
+            maxHeight: height === 'auto' ? '80%' : height,
+          }}
+          className="bg-background dark:bg-dark-background rounded-t-3xl overflow-hidden"
+        >
+          <View {...panResponder.panHandlers} className="items-center py-2">
+            <View className="w-10 h-1 rounded-full bg-foreground-muted dark:bg-dark-foreground-muted opacity-30" />
+          </View>
+          {children}
+        </Animated.View>
+      </View>
     </Modal>
   );
 }

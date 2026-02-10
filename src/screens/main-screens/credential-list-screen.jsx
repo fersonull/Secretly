@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCredentialList } from '../../hooks/use-credential-list';
+import { useCredentials } from '../../hooks/use-credentials';
 import CredentialListHeader from '../../components/credential/credential-list-header';
 import SearchBar from '../../components/credential/search-bar';
 import FilterChips from '../../components/credential/filter-chips';
@@ -12,6 +13,7 @@ import EmptyState from '../../components/credential/empty-state';
 
 export default function CredentialListScreen() {
   const navigation = useNavigation();
+  const { refresh } = useCredentials();
   const {
     credentials,
     searchQuery,
@@ -35,6 +37,10 @@ export default function CredentialListScreen() {
     navigation.navigate('AddEditCredential');
   }, [navigation]);
 
+  const handleEditCredential = useCallback((credential) => {
+    navigation.navigate('AddEditCredential', { id: credential.id });
+  }, [navigation]);
+
   const handleBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
@@ -44,9 +50,11 @@ export default function CredentialListScreen() {
       <CredentialCard
         item={item}
         onPress={() => handleViewCredential(item.id)}
+        onEdit={handleEditCredential}
+        onRefresh={refresh}
       />
     ),
-    [handleViewCredential],
+    [handleViewCredential, handleEditCredential],
   );
 
   const keyExtractor = useCallback(item => item.id, []);

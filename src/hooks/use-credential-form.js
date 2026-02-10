@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Alert } from 'react-native';
 
 export const useCredentialForm = (initialData = null) => {
   const [formData, setFormData] = useState({
@@ -23,23 +22,20 @@ export const useCredentialForm = (initialData = null) => {
     ).join('');
     
     updateField('password', generatedPassword);
-    Alert.alert('Password Generated', 'A strong password has been generated');
+    return { success: true, message: 'A strong password has been generated' };
   };
 
   const validateForm = () => {
     if (!formData.title.trim()) {
-      Alert.alert('Validation Error', 'Please enter a title');
-      return false;
+      return { isValid: false, error: 'Please enter a title' };
     }
     if (!formData.username.trim()) {
-      Alert.alert('Validation Error', 'Please enter a username or email');
-      return false;
+      return { isValid: false, error: 'Please enter a username or email' };
     }
     if (!formData.password.trim()) {
-      Alert.alert('Validation Error', 'Please enter a password');
-      return false;
+      return { isValid: false, error: 'Please enter a password' };
     }
-    return true;
+    return { isValid: true };
   };
 
   return {

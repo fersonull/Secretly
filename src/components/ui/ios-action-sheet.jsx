@@ -1,4 +1,11 @@
-import { View, Text, Modal, Pressable, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  Modal,
+  Pressable,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 
 export default function IosActionSheet({
   visible,
@@ -12,7 +19,7 @@ export default function IosActionSheet({
     <Modal visible={visible} transparent animationType="slide">
       <Pressable className="flex-1 bg-black/40 justify-end" onPress={onClose}>
         <Pressable onPress={e => e.stopPropagation()}>
-          <View className="bg-background-secondary dark:bg-dark-background-secondary px-2 pb-2">
+          <View className="px-2 pb-2">
             {/* Main Sheet */}
             <View className="bg-background dark:bg-dark-background rounded-2xl overflow-hidden mb-2">
               {/* Header */}
