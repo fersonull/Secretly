@@ -169,8 +169,9 @@ export const CredentialsProvider = ({ children }) => {
     const passwordGroups = {};
     
     credentials.forEach(credential => {
-      const password = credential.password;
-      if (password && password.length > 0) {
+      // Add comprehensive null checks
+      if (credential && credential.password && typeof credential.password === 'string' && credential.password.length > 0) {
+        const password = credential.password;
         if (!passwordGroups[password]) {
           passwordGroups[password] = [];
         }
@@ -179,8 +180,9 @@ export const CredentialsProvider = ({ children }) => {
     });
 
     return Object.values(passwordGroups)
-      .filter(group => group.length > 1)
-      .flat();
+      .filter(group => group && group.length > 1)
+      .flat()
+      .filter(credential => credential != null); // Remove any null/undefined credentials
   }, [credentials]);
 
   // Load credentials when user changes

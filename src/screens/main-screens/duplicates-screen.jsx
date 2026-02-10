@@ -11,21 +11,23 @@ export default function DuplicatesScreen() {
 
   // Get duplicate password credentials directly from context
   const duplicateCredentials = getDuplicatePasswordCredentials();
-  
+
   // Group duplicates by password
   const duplicateGroups = useMemo(() => {
     const passwordGroups = {};
 
     duplicateCredentials.forEach(credential => {
-      const password = credential.password;
-      if (!passwordGroups[password]) {
-        passwordGroups[password] = [];
+      // Add null checks for credential and password
+      if (credential && credential.password && credential.password.length > 0) {
+        const password = credential.password;
+        if (!passwordGroups[password]) {
+          passwordGroups[password] = [];
+        }
+        passwordGroups[password].push(credential);
       }
-      passwordGroups[password].push(credential);
     });
 
-    return Object.values(passwordGroups)
-      .sort((a, b) => b.length - a.length); // Sort by group size descending
+    return Object.values(passwordGroups).sort((a, b) => b.length - a.length); // Sort by group size descending
   }, [duplicateCredentials]);
 
   const allDuplicateCredentials = useMemo(() => {
@@ -48,7 +50,7 @@ export default function DuplicatesScreen() {
 
   const renderGroupHeader = useCallback(
     ({ groupSize, password }) => (
-      <View className="bg-warning/10 border border-warning/20 rounded-lg mx-4 mb-3 mt-4 p-3">
+      <View className="bg-warning/10 border border-warning/20 rounded-lg mb-4 p-3">
         <View className="flex-row items-center">
           <Lucide name="copy" size={16} color="#F59E0B" />
           <Text className="text-warning font-sans-medium text-sm ml-2">
@@ -61,18 +63,30 @@ export default function DuplicatesScreen() {
   );
 
   const renderItem = useCallback(
-    ({ item, isFirstInGroup, groupSize }) => (
-      <>
-        {isFirstInGroup &&
-          renderGroupHeader({ groupSize, password: item.password })}
-        <CredentialCard
-          item={item}
-          onPress={() => handleViewCredential(item.id)}
-          onEdit={handleEditCredential}
-          onRefresh={refresh}
-        />
-      </>
-    ),
+    item => {
+      // Add safety checks for item and its properties
+      if (!item || !item.id) {
+        return null;
+      }
+
+      return (
+        <>
+          {item.isFirstInGroup &&
+            item.groupSize &&
+            item.password &&
+            renderGroupHeader({
+              groupSize: item.groupSize,
+              password: item.password,
+            })}
+          <CredentialCard
+            item={item}
+            onPress={() => handleViewCredential(item.id)}
+            onEdit={handleEditCredential}
+            onRefresh={refresh}
+          />
+        </>
+      );
+    },
     [handleViewCredential, handleEditCredential, refresh, renderGroupHeader],
   );
 
@@ -80,19 +94,25 @@ export default function DuplicatesScreen() {
   const flatListData = useMemo(() => {
     const data = [];
     duplicateGroups.forEach(group => {
-      group.forEach((credential, index) => {
-        data.push({
-          ...credential,
-          isFirstInGroup: index === 0,
-          groupSize: group.length,
+      // Add safety check for group
+      if (group && Array.isArray(group) && group.length > 0) {
+        group.forEach((credential, index) => {
+          // Add safety check for credential
+          if (credential && credential.id) {
+            data.push({
+              ...credential,
+              isFirstInGroup: index === 0,
+              groupSize: group.length,
+            });
+          }
         });
-      });
+      }
     });
     return data;
   }, [duplicateGroups]);
 
   const HeaderWarning = () => (
-    <View className="bg-warning/10 border border-warning/20 rounded-lg mx-4 mb-4 p-4">
+    <View className="bg-warning/10 border border-warning/20 rounded-lg m-4 p-4">
       <View className="flex-row items-center mb-2">
         <Lucide name="alert-triangle" size={20} color="#F59E0B" />
         <Text className="text-warning font-sans-bold text-base ml-2">
@@ -100,8 +120,8 @@ export default function DuplicatesScreen() {
         </Text>
       </View>
       <Text className="text-warning/80 font-sans text-sm">
-        {allDuplicateCredentials.length} credentials are using duplicate passwords
-        across {duplicateGroups.length} group
+        {allDuplicateCredentials.length} credentials are using duplicate
+        passwords across {duplicateGroups.length} group
         {duplicateGroups.length !== 1 ? 's' : ''}. Consider using unique
         passwords for better security.
       </Text>
