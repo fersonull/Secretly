@@ -13,42 +13,42 @@ export default function StatsCards({ total, strong, weak, duplicates }) {
         icon="key"
         label="Total"
         value={total}
-        color="bg-primary"
-        iconColor="#FFFFFF"
+        iconColor="#3B82F6"
+        textColor="#3B82F6"
       />
       <StatCard
         icon="shield-check"
         label="Strong"
         value={strong}
-        color="bg-success"
-        iconColor="#FFFFFF"
+        iconColor="#10B981"
+        textColor="#10B981"
       />
       <StatCard
         icon="shield-alert"
         label="Weak"
         value={weak}
-        color="bg-danger"
-        iconColor="#FFFFFF"
+        iconColor="#EF4444"
+        textColor="#EF4444"
       />
       <StatCard
         icon="copy"
         label="Duplicates"
         value={duplicates}
-        color="bg-warning"
-        iconColor="#FFFFFF"
+        iconColor="#F59E0B"
+        textColor="#F59E0B"
       />
     </ScrollView>
   );
 }
 
-function StatCard({ icon, label, value, color, iconColor }) {
+function StatCard({ icon, label, value, iconColor, textColor }) {
   return (
-    <View className={`${color} rounded-2xl p-4 min-w-[140px]`}>
+    <View className="bg-background-card dark:bg-dark-background-card border border-border dark:border-dark-border rounded-2xl p-4 min-w-[140px]">
       <View className="flex-row items-center justify-between mb-2">
         <Lucide name={icon} size={24} color={iconColor} />
-        <Text className="text-white/80 font-sans text-xs">{label}</Text>
+        <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-xs">{label}</Text>
       </View>
-      <Text className="text-white font-sans-bold text-3xl">{value}</Text>
+      <Text className="font-sans-bold text-3xl" style={{ color: textColor }}>{value}</Text>
     </View>
   );
 }
