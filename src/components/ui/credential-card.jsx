@@ -3,7 +3,7 @@ import Lucide from '@react-native-vector-icons/lucide';
 import { useCategories } from '../../hooks/use-categories';
 import { useActionSheet } from '../../hooks/use-action-sheet';
 import { useAuth } from '../../context/auth-context';
-import { credentialsStorage } from '../../services/credentials-storage';
+import { useCredentials } from '../../hooks/use-credentials';
 import IosActionSheet from './ios-action-sheet';
 
 export default function CredentialCard({
@@ -16,6 +16,7 @@ export default function CredentialCard({
   const { user } = useAuth();
   const { actionSheet, showActionSheet, hideActionSheet } = useActionSheet();
   const { categories } = useCategories();
+  const { toggleFavorite } = useCredentials();
 
   const getCategoryIcon = category => {
     // Find the category in the complete list (default + custom)
@@ -25,7 +26,7 @@ export default function CredentialCard({
 
   const handleFavoriteToggle = async () => {
     try {
-      const result = await credentialsStorage.toggleFavorite(user.id, item.id);
+      const result = await toggleFavorite(item.id);
       if (result.success) {
         onRefresh?.();
       }

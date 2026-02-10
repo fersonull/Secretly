@@ -6,7 +6,7 @@ export default function StatsCards({
   strong,
   weak,
   duplicates,
-  onCardPress,
+  onOrganizePress,
 }) {
   return (
     <ScrollView
@@ -21,7 +21,6 @@ export default function StatsCards({
         value={total}
         iconColor="#3B82F6"
         textColor="#3B82F6"
-        onPress={() => onCardPress?.('total')}
       />
       <StatCard
         icon="shield-check"
@@ -29,7 +28,6 @@ export default function StatsCards({
         value={strong}
         iconColor="#10B981"
         textColor="#10B981"
-        onPress={() => onCardPress?.('strong')}
       />
       <StatCard
         icon="shield-alert"
@@ -37,7 +35,6 @@ export default function StatsCards({
         value={weak}
         iconColor="#EF4444"
         textColor="#EF4444"
-        onPress={() => onCardPress?.('weak')}
       />
       <StatCard
         icon="copy"
@@ -45,31 +42,40 @@ export default function StatsCards({
         value={duplicates}
         iconColor="#F59E0B"
         textColor="#F59E0B"
-        onPress={() => onCardPress?.('duplicates')}
       />
+      <OrganizeCard onPress={onOrganizePress} />
     </ScrollView>
   );
 }
 
-function StatCard({ icon, label, value, iconColor, textColor, onPress }) {
+function StatCard({ icon, label, value, iconColor, textColor }) {
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      className="bg-background-card dark:bg-dark-background-card border border-border dark:border-dark-border rounded-2xl p-4 min-w-[140px]"
-      activeOpacity={0.7}
-    >
+    <View className="bg-background-card dark:bg-dark-background-card border border-border dark:border-dark-border rounded-2xl p-4 min-w-[140px]">
       <View className="flex-row items-center justify-between mb-2">
         <Lucide name={icon} size={24} color={iconColor} />
         <Text className="text-foreground-muted dark:text-dark-foreground-muted font-sans text-xs">
           {label}
         </Text>
       </View>
-      <View className="flex-row items-center justify-between">
-        <Text className="font-sans-bold text-3xl" style={{ color: textColor }}>
-          {value}
-        </Text>
-        <Lucide name="chevron-right" size={20} color={iconColor} />
+      <Text className="font-sans-bold text-3xl" style={{ color: textColor }}>
+        {value}
+      </Text>
+    </View>
+  );
+}
+
+function OrganizeCard({ onPress }) {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      className="bg-primary/10 border border-primary/20 rounded-2xl p-4 min-w-[140px]"
+      activeOpacity={0.7}
+    >
+      <View className="flex-row items-center justify-between mb-2">
+        <Lucide name="layout-grid" size={24} color="#3B82F6" />
+        <Text className="text-primary font-sans text-xs">View All</Text>
       </View>
+      <Text className="text-primary font-sans-bold text-lg">Organize</Text>
     </TouchableOpacity>
   );
 }

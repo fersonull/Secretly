@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 import AppHeader from '../components/common/app-header';
 import FavoritesScreen from '../screens/main-screens/favorites-screen';
-import RecentScreen from '../screens/main-screens/recent-screen';
 import WeakPasswordsScreen from '../screens/main-screens/weak-passwords-screen';
 import DuplicatesScreen from '../screens/main-screens/duplicates-screen';
 import ViewCredentialScreen from '../screens/main-screens/view-credential-screen';
@@ -59,11 +58,6 @@ function OrganizeTabs({ navigation }) {
           name="Favorites"
           component={FavoritesScreen}
           options={{ title: 'Favorites' }}
-        />
-        <TopTab.Screen 
-          name="Recent" 
-          component={RecentScreen}
-          options={{ title: 'Recent' }}
         />
         <TopTab.Screen 
           name="WeakPasswords" 

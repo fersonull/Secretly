@@ -7,9 +7,9 @@ export default function Providers({ children }) {
   return (
     <SafeAreaProvider>
       <AuthProvider>
-        <CredentialsProvider>
-          <ToastProvider>{children}</ToastProvider>
-        </CredentialsProvider>
+        <ToastProvider>
+          <CredentialsProvider>{children}</CredentialsProvider>
+        </ToastProvider>
       </AuthProvider>
     </SafeAreaProvider>
   );
