@@ -1,18 +1,58 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import Lucide from '@react-native-vector-icons/lucide';
 import { useCategories } from '../../hooks/use-categories';
+import { useActionSheet } from '../../hooks/use-action-sheet';
+import IosActionSheet from '../ui/ios-action-sheet';
 
-export default function CredentialHeader({ credential, onBack, onEdit }) {
+export default function CredentialHeader({
+  credential,
+  onBack,
+  onEdit,
+  onDelete,
+  onToggleFavorite,
+}) {
   const { categories } = useCategories();
+  const { actionSheet, showActionSheet, hideActionSheet } = useActionSheet();
 
-  const getCategoryIcon = (category) => {
+  const getCategoryIcon = category => {
     const foundCategory = categories.find(cat => cat.id === category);
     return foundCategory?.icon || 'key';
   };
 
-  const getCategoryLabel = (category) => {
+  const getCategoryLabel = category => {
     const foundCategory = categories.find(cat => cat.id === category);
     return foundCategory?.label || 'Other';
+  };
+
+  const handleMenuPress = () => {
+    const options = [
+      {
+        text: credential.isFavorite
+          ? 'Remove from Favorites'
+          : 'Add to Favorites',
+        onPress: () => {
+          hideActionSheet();
+          onToggleFavorite?.();
+        },
+      },
+      {
+        text: 'Edit',
+        onPress: () => {
+          hideActionSheet();
+          onEdit?.();
+        },
+      },
+      {
+        text: 'Delete',
+        onPress: () => {
+          hideActionSheet();
+          onDelete?.();
+        },
+        style: 'destructive',
+      },
+    ];
+
+    showActionSheet('Actions', 'Choose an action', options);
   };
 
   return (
@@ -21,8 +61,8 @@ export default function CredentialHeader({ credential, onBack, onEdit }) {
         <TouchableOpacity onPress={onBack} className="mr-4">
           <Lucide name="arrow-left" size={24} color="#6B7280" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onEdit}>
-          <Lucide name="edit" size={24} color="#6B7280" />
+        <TouchableOpacity onPress={handleMenuPress}>
+          <Lucide name="ellipsis" size={24} color="#6B7280" />
         </TouchableOpacity>
       </View>
 
@@ -43,6 +83,14 @@ export default function CredentialHeader({ credential, onBack, onEdit }) {
           </Text>
         </View>
       </View>
+
+      <IosActionSheet
+        visible={actionSheet.visible}
+        title={actionSheet.title}
+        message={actionSheet.message}
+        options={actionSheet.options}
+        onClose={hideActionSheet}
+      />
     </View>
   );
 }

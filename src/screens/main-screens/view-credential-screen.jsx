@@ -5,7 +5,6 @@ import { useCredentials } from '../../hooks/use-credentials';
 import IosLoading from '../../components/ui/ios-loading';
 import CredentialHeader from '../../components/credential/credential-header';
 import CredentialDetails from '../../components/credential/credential-details';
-import CredentialActions from '../../components/credential/credential-actions';
 import { useEffect, useState } from 'react';
 
 export default function ViewCredentialScreen() {
@@ -66,16 +65,11 @@ export default function ViewCredentialScreen() {
           credential={credential}
           onBack={handleBack}
           onEdit={handleEdit}
-        />
-
-        <CredentialDetails credential={credential} />
-
-        <CredentialActions
-          credential={credential}
-          onEdit={handleEdit}
           onDelete={handleDelete}
           onToggleFavorite={handleToggleFavorite}
         />
+
+        <CredentialDetails credential={credential} />
       </ScrollView>
     </SafeAreaView>
   );
