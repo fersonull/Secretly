@@ -45,6 +45,18 @@ export default function DashboardScreen() {
     navigation.navigate('AddEditCredential', { id: credential.id });
   }, [navigation]);
 
+  const handleStatCardPress = useCallback((statType) => {
+    // Navigate to organize screen - the tab selection will be handled in the screen
+    navigation.navigate('Organize', {
+      screen: 'OrganizeTabs',
+      params: { 
+        screen: statType === 'weak' ? 'WeakPasswords' : 
+               statType === 'duplicates' ? 'Duplicates' :
+               statType === 'strong' ? 'Recent' : 'Favorites'
+      }
+    });
+  }, [navigation]);
+
   const handleViewAll = useCallback(() => {
     navigation.navigate('CredentialList');
   }, [navigation]);
@@ -77,6 +89,7 @@ export default function DashboardScreen() {
           strong={stats.strong}
           weak={stats.weak}
           duplicates={stats.duplicates}
+          onCardPress={handleStatCardPress}
         />
 
         <CategoryChips

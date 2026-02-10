@@ -1,6 +1,7 @@
-import { useTheme } from '@react-navigation/native';
+import { useTheme, useRoute } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useEffect } from 'react';
 import AppHeader from '../components/common/app-header';
 import FavoritesScreen from '../screens/main-screens/favorites-screen';
 import RecentScreen from '../screens/main-screens/recent-screen';
@@ -13,14 +14,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const TopTab = createMaterialTopTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function OrganizeTabs() {
+function OrganizeTabs({ navigation }) {
   const theme = useTheme();
   const isDark = theme.dark;
+  const route = useRoute();
+  
+  // Get initial route name from navigation params
+  const initialRouteName = route.params?.screen || 'Favorites';
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-dark-background">
       <AppHeader title="Organize" />
       <TopTab.Navigator
+        initialRouteName={initialRouteName}
         screenOptions={{
           tabBarStyle: {
             backgroundColor: isDark ? '#27272A' : '#FFFFFF',
