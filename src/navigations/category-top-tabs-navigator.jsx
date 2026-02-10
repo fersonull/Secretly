@@ -1,15 +1,19 @@
 import { useTheme } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppHeader from '../components/common/app-header';
 import FavoritesScreen from '../screens/main-screens/favorites-screen';
 import RecentScreen from '../screens/main-screens/recent-screen';
 import WeakPasswordsScreen from '../screens/main-screens/weak-passwords-screen';
 import DuplicatesScreen from '../screens/main-screens/duplicates-screen';
+import ViewCredentialScreen from '../screens/main-screens/view-credential-screen';
+import AddEditCredentialScreen from '../screens/main-screens/add-edit-credential-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TopTab = createMaterialTopTabNavigator();
+const Stack = createNativeStackNavigator();
 
-export default function CategoryTopTabsNavigator() {
+function OrganizeTabs() {
   const theme = useTheme();
   const isDark = theme.dark;
 
@@ -67,5 +71,15 @@ export default function CategoryTopTabsNavigator() {
         />
       </TopTab.Navigator>
     </SafeAreaView>
+  );
+}
+
+export default function CategoryTopTabsNavigator() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="OrganizeTabs" component={OrganizeTabs} />
+      <Stack.Screen name="ViewCredential" component={ViewCredentialScreen} />
+      <Stack.Screen name="AddEditCredential" component={AddEditCredentialScreen} />
+    </Stack.Navigator>
   );
 }
