@@ -3,26 +3,36 @@ import { useState } from 'react';
 import Lucide from '@react-native-vector-icons/lucide';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useToast } from '../../hooks/use-toast';
+import OpenUrlButton from '../../components/credential/open-url-button';
 
 export default function CredentialDetails({ credential }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [copiedField, setCopiedField] = useState(null);
   const { showToast } = useToast();
 
-  const copyToClipboard = (text, label) => {
+  console.log(credential);
+
+  const copyToClipboard = (text, label, fieldName) => {
     Clipboard.setString(text);
     showToast(`${label} copied to clipboard`, 'success');
+
+    // Show checkmark feedback
+    setCopiedField(fieldName);
+    setTimeout(() => {
+      setCopiedField(null);
+    }, 2000);
   };
 
   const handleCopyUsername = () => {
-    copyToClipboard(credential.username, 'Username');
+    copyToClipboard(credential.username, 'Username', 'username');
   };
 
   const handleCopyPassword = () => {
-    copyToClipboard(credential.password, 'Password');
+    copyToClipboard(credential.password, 'Password', 'password');
   };
 
   const handleCopyUrl = () => {
-    copyToClipboard(credential.url, 'URL');
+    copyToClipboard(credential.url, 'URL', 'url');
   };
 
   const DetailRow = ({
@@ -31,8 +41,11 @@ export default function CredentialDetails({ credential }) {
     onCopy,
     showCopyButton = true,
     isPassword = false,
+    fieldName,
   }) => {
     if (!value) return null;
+
+    const isCopied = copiedField === fieldName;
 
     return (
       <View className="mb-6">
@@ -40,12 +53,19 @@ export default function CredentialDetails({ credential }) {
           {label}
         </Text>
         <View className="flex-row items-center justify-between bg-background-card dark:bg-dark-background-card p-4 rounded-lg border border-border dark:border-dark-border">
-          <Text className="text-foreground dark:text-dark-foreground font-sans text-base flex-1 mr-3">
+          <Text
+            className={` font-sans text-base flex-1 mr-3 ${
+              fieldName === 'url'
+                ? 'text-primary'
+                : 'text-foreground dark:text-dark-foreground'
+            }`}
+          >
             {isPassword && !showPassword ? '•'.repeat(value.length) : value}
           </Text>
           <View className="flex-row items-center">
             {isPassword && (
               <TouchableOpacity
+                activeOpacity={0.7}
                 onPress={() => setShowPassword(!showPassword)}
                 className="p-2 mr-1"
               >
@@ -56,10 +76,26 @@ export default function CredentialDetails({ credential }) {
                 />
               </TouchableOpacity>
             )}
-            {showCopyButton && (
-              <TouchableOpacity onPress={onCopy} className="p-2">
-                <Lucide name="copy" size={20} color="#6B7280" />
+            {showCopyButton && fieldName !== 'url' ? (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={onCopy}
+                className="p-2"
+              >
+                <Lucide
+                  name={isCopied ? 'check' : 'copy'}
+                  size={20}
+                  color={isCopied ? '#10B981' : '#6B7280'}
+                />
               </TouchableOpacity>
+            ) : (
+              <OpenUrlButton url={value} className="p-2">
+                <Lucide
+                  name="square-arrow-out-up-right"
+                  size={20}
+                  color="#3B82F6"
+                />
+              </OpenUrlButton>
             )}
           </View>
         </View>
@@ -70,21 +106,26 @@ export default function CredentialDetails({ credential }) {
   return (
     <View className="px-6 py-6">
       <DetailRow
-        label="Username"
+        label="Username / Email"
         value={credential.username}
         onCopy={handleCopyUsername}
+        fieldName="username"
       />
       <DetailRow
         label="Password"
         value={credential.password}
         onCopy={handleCopyPassword}
         isPassword={true}
+        fieldName="password"
       />
-      <DetailRow
-        label="Website"
-        value={credential.url}
-        onCopy={handleCopyUrl}
-      />
+      {credential.url && (
+        <DetailRow
+          label="Website"
+          value={credential.url}
+          onCopy={handleCopyUrl}
+          fieldName="url"
+        />
+      )}
       {credential.notes && (
         <DetailRow
           label="Notes"
