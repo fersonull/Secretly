@@ -111,6 +111,43 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updatePassword = async (currentPassword, newPassword) => {
+    try {
+      if (!user) {
+        return { success: false, error: 'No user logged in' };
+      }
+
+      // Get current user data with password
+      const currentUser = await authStorage.findUserByEmail(user.email);
+      if (!currentUser) {
+        return { success: false, error: 'User not found' };
+      }
+
+      // Verify current password
+      const isCurrentPasswordValid = await verifyPassword(currentPassword, currentUser.password);
+      if (!isCurrentPasswordValid) {
+        return { success: false, error: 'Current password is incorrect' };
+      }
+
+      // Hash new password
+      const newHashedPassword = await hashPassword(newPassword);
+      if (!newHashedPassword) {
+        return { success: false, error: 'Failed to secure new password' };
+      }
+
+      // Update password in storage
+      const result = await authStorage.updateUserPassword(user.id, newHashedPassword);
+      if (!result.success) {
+        return result;
+      }
+
+      return { success: true };
+    } catch (error) {
+      console.error('Update password error:', error);
+      return { success: false, error: 'An error occurred while updating password' };
+    }
+  };
+
   const value = {
     user,
     isAuthenticated,
@@ -118,6 +155,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    updatePassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

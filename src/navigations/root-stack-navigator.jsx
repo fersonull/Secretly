@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../context/auth-context';
 import AuthStackNavigator from '../navigations/auth-stack-navigator';
 import MainDrawerNavigator from '../navigations/main-drawer-navigator';
+import ChangePasswordScreen from '../screens/main-screens/change-password-screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +28,17 @@ const RootStackNavigator = () => {
       {!isAuthenticated ? (
         <Stack.Screen name="Auth" component={AuthStackNavigator} />
       ) : (
-        <Stack.Screen name="Main" component={MainDrawerNavigator} />
+        <>
+          <Stack.Screen name="Main" component={MainDrawerNavigator} />
+          <Stack.Screen 
+            name="ChangePassword" 
+            component={ChangePasswordScreen}
+            options={{
+              presentation: 'modal',
+              animation: 'slide_from_bottom',
+            }}
+          />
+        </>
       )}
     </Stack.Navigator>
   );

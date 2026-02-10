@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, Alert } from 'react-native';
+import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import AppHeader from '../../components/common/app-header';
@@ -8,32 +8,36 @@ import SettingsItem from '../../components/settings/settings-item';
 import IosSwitch from '../../components/ui/ios-switch';
 import { useAuth } from '../../context/auth-context';
 import { useToast } from '../../hooks/use-toast';
+import { useAlert } from '../../hooks/use-alert';
+import IosAlert from '../../components/ui/ios-alert';
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
   const { user, logout } = useAuth();
   const { showToast } = useToast();
+  const { alert, showAlert, hideAlert } = useAlert();
 
   const handleChangePassword = () => {
-    showToast('Change password feature coming soon!', 'info');
+    navigation.navigate('ChangePassword');
   };
 
   const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Logout', 
-          style: 'destructive',
-          onPress: () => {
-            logout();
+    showAlert('Logout', 'Are you sure you want to logout?', [
+      { text: 'Cancel', style: 'cancel', onPress: hideAlert },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: async () => {
+          hideAlert();
+
+          const result = await logout();
+
+          if (result.success) {
             showToast('Logged out successfully', 'success');
           }
-        }
-      ]
-    );
+        },
+      },
+    ]);
   };
 
   const handleAutoLock = () => {
@@ -44,7 +48,7 @@ export default function SettingsScreen() {
     showToast('Clipboard timer settings coming soon!', 'info');
   };
 
-  const handleDarkModeToggle = (value) => {
+  const handleDarkModeToggle = value => {
     showToast('Dark mode toggle coming soon!', 'info');
   };
 
@@ -57,26 +61,30 @@ export default function SettingsScreen() {
   };
 
   const handleClearAllData = () => {
-    Alert.alert(
-      'Clear All Data',
-      'This will permanently delete all your credentials and settings. This action cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Clear All', 
+    IOSAlert.alert({
+      title: 'Clear All Data',
+      message:
+        'This will permanently delete all your credentials and settings. This action cannot be undone.',
+      buttons: [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Clear All',
           style: 'destructive',
           onPress: () => {
             showToast('Clear all data feature coming soon!', 'info');
-          }
-        }
-      ]
-    );
+          },
+        },
+      ],
+    });
   };
 
   return (
     <SafeAreaView className="bg-background dark:bg-dark-background flex-1">
       <AppHeader title="Settings" />
-      
+
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Account Section */}
         <SettingsSection title="Account">
@@ -125,10 +133,7 @@ export default function SettingsScreen() {
             subtitle="Use dark theme"
             icon="moon"
             rightElement={
-              <IosSwitch
-                value={false}
-                onValueChange={handleDarkModeToggle}
-              />
+              <IosSwitch value={false} onValueChange={handleDarkModeToggle} />
             }
             showChevron={false}
             isLast={true}
@@ -158,6 +163,14 @@ export default function SettingsScreen() {
             isLast={true}
           />
         </SettingsSection>
+
+        <IosAlert
+          visible={alert.visible}
+          title={alert.title}
+          message={alert.message}
+          buttons={alert.buttons}
+          onClose={hideAlert}
+        />
       </ScrollView>
     </SafeAreaView>
   );

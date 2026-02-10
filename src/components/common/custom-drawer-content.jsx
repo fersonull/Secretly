@@ -26,7 +26,7 @@ export default function CustomDrawerContent(props) {
           hideAlert();
           const result = await logout();
           if (result.success) {
-            showToast('success', 'Logged out successfully');
+            showToast('Logged out successfully', 'success');
           }
         },
       },

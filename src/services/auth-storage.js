@@ -93,4 +93,25 @@ export const authStorage = {
       return [];
     }
   },
+
+  async updateUserPassword(userId, newHashedPassword) {
+    try {
+      const users = await this.getAllUsers();
+      const userIndex = users.findIndex(u => u.id === userId);
+      
+      if (userIndex === -1) {
+        return { success: false, error: 'User not found' };
+      }
+
+      users[userIndex].password = newHashedPassword;
+      users[userIndex].updatedAt = new Date().toISOString();
+      
+      await storage.setItem(USERS_STORAGE_KEY, users);
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Error updating user password:', error);
+      return { success: false, error: 'Failed to update password' };
+    }
+  },
 };
