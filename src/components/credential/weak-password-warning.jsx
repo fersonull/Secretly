@@ -31,7 +31,7 @@ export default function WeakPasswordWarning({ credential, onEdit }) {
         className="bg-danger rounded-lg p-3 flex-row items-center justify-center"
         activeOpacity={0.8}
       >
-        <Lucide name="edit" size={16} color="#FFFFFF" />
+        <Lucide name="square-pen" size={16} color="#FFFFFF" />
         <Text className="text-white font-sans-medium text-sm ml-2">
           Update Password
         </Text>

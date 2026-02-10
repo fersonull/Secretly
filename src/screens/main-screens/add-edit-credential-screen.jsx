@@ -86,7 +86,7 @@ export default function AddEditCredentialScreen() {
     setIsLoading(false);
 
     if (result.success) {
-      navigation.goBack();
+      navigation.navigate('ViewCredential', { id: credentialId });
       showToast(
         `Credential ${isEdit ? 'updated' : 'added'} successfully!`,
         'success',

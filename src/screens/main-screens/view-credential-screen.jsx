@@ -16,13 +16,16 @@ export default function ViewCredentialScreen() {
   const { getCredentialById, isLoading, refresh, deleteCredential } =
     useCredentials();
 
-  useEffect(() => {
+  const init = async () => {
+    await refresh();
+
     const cred = getCredentialById(id);
 
-    console.log(id);
-    console.log(cred);
-
     setCredential(cred);
+  };
+
+  useEffect(() => {
+    init();
   }, [isLoading]);
 
   const handleBack = () => {
