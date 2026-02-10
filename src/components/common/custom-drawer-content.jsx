@@ -8,14 +8,13 @@ import { IconLogo } from './icon-logo';
 import { Logo } from './logo';
 import { useAuth } from '../../context/auth-context';
 import IosAlert from '../ui/ios-alert';
-import IosToast from '../ui/ios-toast';
 import { useAlert } from '../../hooks/use-alert';
 import { useToast } from '../../hooks/use-toast';
 
 export default function CustomDrawerContent(props) {
   const { user, logout } = useAuth();
   const { alert, showAlert, hideAlert } = useAlert();
-  const { toast, showToast, hideToast } = useToast();
+  const { showToast } = useToast();
 
   const handleLogout = () => {
     showAlert(
@@ -98,13 +97,6 @@ export default function CustomDrawerContent(props) {
         onClose={hideAlert}
       />
 
-      <IosToast
-        visible={toast.visible}
-        type={toast.type}
-        message={toast.message}
-        duration={toast.duration}
-        onHide={hideToast}
-      />
     </>
   );
 }

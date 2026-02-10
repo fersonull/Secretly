@@ -12,7 +12,6 @@ import FormInput from '../../components/credential/form-input';
 import PasswordStrengthMeter from '../../components/ui/password-strength-meter';
 import AddCategoryModal from '../../components/credential/add-category-modal';
 import IosAlert from '../../components/ui/ios-alert';
-import IosToast from '../../components/ui/ios-toast';
 import IosLoading from '../../components/ui/ios-loading';
 import { useToast } from '../../hooks/use-toast';
 import { useAlert } from '../../hooks/use-alert';
@@ -28,7 +27,7 @@ export default function AddEditCredentialScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [categoryRefreshKey, setCategoryRefreshKey] = useState(0);
-  const { toast, showToast, hideToast } = useToast();
+  const { showToast } = useToast();
   const { alert, showAlert, hideAlert } = useAlert();
   const { addCredential, updateCredential, getCredentialById } = useCredentials();
   const { addCategory, refresh: refreshCategories } = useCategories();
@@ -251,13 +250,6 @@ export default function AddEditCredentialScreen() {
         onClose={hideAlert}
       />
 
-      <IosToast
-        visible={toast.visible}
-        type={toast.type}
-        message={toast.message}
-        duration={toast.duration}
-        onHide={hideToast}
-      />
 
       <IosLoading visible={isLoading} message={isEdit ? 'Updating...' : 'Saving...'} />
 

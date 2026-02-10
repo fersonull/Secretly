@@ -17,7 +17,6 @@ import { Logo } from '../../components/common/logo';
 import { IconLogo } from '../../components/common/icon-logo';
 import PasswordStrengthMeter from '../../components/ui/password-strength-meter';
 import IosAlert from '../../components/ui/ios-alert';
-import IosToast from '../../components/ui/ios-toast';
 import IosLoading from '../../components/ui/ios-loading';
 import { useTheme } from '@react-navigation/native';
 import { useAuth } from '../../context/auth-context';
@@ -27,7 +26,7 @@ import { useAlert } from '../../hooks/use-alert';
 const LoginScreen = ({ navigation }) => {
   const theme = useTheme();
   const { register } = useAuth();
-  const { toast, showToast, hideToast } = useToast();
+  const { showToast } = useToast();
   const { alert, showAlert, hideAlert } = useAlert();
 
   const [email, setEmail] = useState('');
@@ -231,13 +230,6 @@ const LoginScreen = ({ navigation }) => {
         onClose={hideAlert}
       />
 
-      <IosToast
-        visible={toast.visible}
-        type={toast.type}
-        message={toast.message}
-        duration={toast.duration}
-        onHide={hideToast}
-      />
 
       <IosLoading visible={isLoading} message="Creating account..." />
     </SafeAreaView>
