@@ -17,24 +17,20 @@ export default function CustomDrawerContent(props) {
   const { showToast } = useToast();
 
   const handleLogout = () => {
-    showAlert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        { text: 'Cancel', style: 'cancel', onPress: hideAlert },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            hideAlert();
-            const result = await logout();
-            if (result.success) {
-              showToast('success', 'Logged out successfully');
-            }
-          },
+    showAlert('Logout', 'Are you sure you want to logout?', [
+      { text: 'Cancel', style: 'cancel', onPress: hideAlert },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: async () => {
+          hideAlert();
+          const result = await logout();
+          if (result.success) {
+            showToast('success', 'Logged out successfully');
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
   return (
@@ -64,7 +60,7 @@ export default function CustomDrawerContent(props) {
         <View className="flex-1 px-4 py-3">
           <DrawerItemList {...props} />
         </View>
-        
+
         {/* Logout Button */}
         <View className="px-4 pb-4">
           <TouchableOpacity
@@ -96,7 +92,6 @@ export default function CustomDrawerContent(props) {
         buttons={alert.buttons}
         onClose={hideAlert}
       />
-
     </>
   );
 }
