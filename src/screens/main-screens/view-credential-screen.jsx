@@ -69,7 +69,7 @@ export default function ViewCredentialScreen() {
           onToggleFavorite={handleToggleFavorite}
         />
 
-        <CredentialDetails credential={credential} />
+        <CredentialDetails credential={credential} onEdit={handleEdit} />
       </ScrollView>
     </SafeAreaView>
   );

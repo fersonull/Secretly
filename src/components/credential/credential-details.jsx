@@ -4,13 +4,13 @@ import Lucide from '@react-native-vector-icons/lucide';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useToast } from '../../hooks/use-toast';
 import OpenUrlButton from '../../components/credential/open-url-button';
+import WeakPasswordWarning from './weak-password-warning';
 
-export default function CredentialDetails({ credential }) {
+export default function CredentialDetails({ credential, onEdit }) {
   const [showPassword, setShowPassword] = useState(false);
   const [copiedField, setCopiedField] = useState(null);
   const { showToast } = useToast();
 
-  console.log(credential);
 
   const copyToClipboard = (text, label, fieldName) => {
     Clipboard.setString(text);
@@ -118,6 +118,10 @@ export default function CredentialDetails({ credential }) {
         isPassword={true}
         fieldName="password"
       />
+      
+      {credential.passwordStrength === 'weak' && (
+        <WeakPasswordWarning credential={credential} onEdit={onEdit} />
+      )}
       {credential.url && (
         <DetailRow
           label="Website"
