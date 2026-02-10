@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import DashboardScreen from '../screens/main-screens/dashboard-screen';
+import MainBottomTabsNavigator from '../navigations/main-bottom-tabs-navigator';
 import CredentialListScreen from '../screens/main-screens/credential-list-screen';
 import ViewCredentialScreen from '../screens/main-screens/view-credential-screen';
 import AddEditCredentialScreen from '../screens/main-screens/add-edit-credential-screen';
@@ -14,7 +14,7 @@ export default function DashboardStackNavigator() {
         animation: 'ios_from_right',
       }}
     >
-      <Stack.Screen name="Dashboard" component={DashboardScreen} />
+      <Stack.Screen name="MainTabs" component={MainBottomTabsNavigator} />
       <Stack.Screen name="CredentialList" component={CredentialListScreen} />
       <Stack.Screen name="ViewCredential" component={ViewCredentialScreen} />
       <Stack.Screen

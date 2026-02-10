@@ -61,7 +61,7 @@ export default function RecentScreen() {
         keyExtractor={item => item.id}
         contentContainerStyle={{
           padding: 16,
-          paddingBottom: 100,
+          paddingBottom: 140,
         }}
         showsVerticalScrollIndicator={false}
       />

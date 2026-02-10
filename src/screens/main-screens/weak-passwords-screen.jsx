@@ -82,7 +82,7 @@ export default function WeakPasswordsScreen() {
         keyExtractor={item => item.id}
         contentContainerStyle={{
           paddingHorizontal: 16,
-          paddingBottom: 100,
+          paddingBottom: 140,
         }}
         showsVerticalScrollIndicator={false}
       />

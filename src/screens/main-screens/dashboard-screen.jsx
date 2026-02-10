@@ -137,7 +137,7 @@ export default function DashboardScreen() {
         keyExtractor={item => item.id}
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={renderEmpty}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 80 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 140 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
