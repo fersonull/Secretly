@@ -58,7 +58,13 @@ export default function AddEditCredentialScreen() {
   }, [isEdit, credentialId, getCredentialById]);
 
   const handleSave = useCallback(async () => {
-    if (!validateForm()) return;
+    const validation = validateForm();
+    if (!validation.isValid) {
+      showAlert('Validation Error', validation.error, [
+        { text: 'OK', onPress: hideAlert },
+      ]);
+      return;
+    }
 
     setIsLoading(true);
     
@@ -111,10 +117,17 @@ export default function AddEditCredentialScreen() {
     }
   }, [addCategory, refreshCategories, updateField, showToast, showAlert, hideAlert]);
 
+  const handleGeneratePassword = useCallback(() => {
+    const result = generatePassword();
+    if (result.success) {
+      showToast('success', result.message);
+    }
+  }, [generatePassword, showToast]);
+
   const GenerateButton = useCallback(
     () => (
       <TouchableOpacity
-        onPress={generatePassword}
+        onPress={handleGeneratePassword}
         className="flex-row items-center"
       >
         <Lucide name="wand" size={16} color="#3B82F6" />
@@ -123,7 +136,7 @@ export default function AddEditCredentialScreen() {
         </Text>
       </TouchableOpacity>
     ),
-    [generatePassword],
+    [handleGeneratePassword],
   );
 
   return (
