@@ -27,10 +27,11 @@ export default function AddEditCredentialScreen() {
   const [showUrlField, setShowUrlField] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [categoryRefreshKey, setCategoryRefreshKey] = useState(0);
   const { toast, showToast, hideToast } = useToast();
   const { alert, showAlert, hideAlert } = useAlert();
   const { addCredential, updateCredential, getCredentialById } = useCredentials();
-  const { addCategory } = useCategories();
+  const { addCategory, refresh: refreshCategories } = useCategories();
 
   const {
     formData,
@@ -97,6 +98,10 @@ export default function AddEditCredentialScreen() {
     
     if (result.success) {
       setShowCategoryModal(false);
+      // Force refresh categories to ensure immediate UI update
+      await refreshCategories();
+      // Trigger CategorySelector refresh
+      setCategoryRefreshKey(prev => prev + 1);
       updateField('category', result.category.id);
       showToast('success', 'Custom category added successfully!');
     } else {
@@ -104,7 +109,7 @@ export default function AddEditCredentialScreen() {
         { text: 'OK', onPress: hideAlert },
       ]);
     }
-  }, [addCategory, updateField, showToast, showAlert, hideAlert]);
+  }, [addCategory, refreshCategories, updateField, showToast, showAlert, hideAlert]);
 
   const GenerateButton = useCallback(
     () => (
@@ -144,6 +149,7 @@ export default function AddEditCredentialScreen() {
             selectedCategory={formData.category}
             onSelectCategory={value => updateField('category', value)}
             onAddCategory={() => setShowCategoryModal(true)}
+            refreshKey={categoryRefreshKey}
           />
 
           <FormInput

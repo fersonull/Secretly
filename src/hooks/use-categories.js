@@ -69,6 +69,10 @@ export const useCategories = () => {
 
   const allCategories = [...DEFAULT_CATEGORIES, ...customCategories];
 
+  const refresh = useCallback(() => {
+    loadCategories();
+  }, [loadCategories]);
+
   return {
     categories: allCategories,
     customCategories,
@@ -76,5 +80,6 @@ export const useCategories = () => {
     isLoading,
     addCategory,
     deleteCategory,
+    refresh,
   };
 };

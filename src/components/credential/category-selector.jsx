@@ -1,9 +1,17 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { useEffect } from 'react';
 import Lucide from '@react-native-vector-icons/lucide';
 import { useCategories } from '../../hooks/use-categories';
 
-export default function CategorySelector({ selectedCategory, onSelectCategory, onAddCategory }) {
-  const { categories } = useCategories();
+export default function CategorySelector({ selectedCategory, onSelectCategory, onAddCategory, refreshKey }) {
+  const { categories, refresh } = useCategories();
+
+  // Force refresh when refreshKey changes
+  useEffect(() => {
+    if (refreshKey) {
+      refresh();
+    }
+  }, [refreshKey, refresh]);
 
   return (
     <View className="mb-4">
