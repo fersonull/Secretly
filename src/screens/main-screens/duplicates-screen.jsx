@@ -7,29 +7,28 @@ import CredentialCard from '../../components/ui/credential-card';
 
 export default function DuplicatesScreen() {
   const navigation = useNavigation();
-  const { credentials, refresh } = useCredentials();
+  const { getDuplicatePasswordCredentials, refresh } = useCredentials();
 
-  // Find duplicate passwords
+  // Get duplicate password credentials directly from context
+  const duplicateCredentials = getDuplicatePasswordCredentials();
+  
+  // Group duplicates by password
   const duplicateGroups = useMemo(() => {
     const passwordGroups = {};
 
-    credentials.forEach(credential => {
+    duplicateCredentials.forEach(credential => {
       const password = credential.password;
-      if (password && password.length > 0) {
-        if (!passwordGroups[password]) {
-          passwordGroups[password] = [];
-        }
-        passwordGroups[password].push(credential);
+      if (!passwordGroups[password]) {
+        passwordGroups[password] = [];
       }
+      passwordGroups[password].push(credential);
     });
 
-    // Return only groups with more than one credential
     return Object.values(passwordGroups)
-      .filter(group => group.length > 1)
       .sort((a, b) => b.length - a.length); // Sort by group size descending
-  }, [credentials]);
+  }, [duplicateCredentials]);
 
-  const duplicateCredentials = useMemo(() => {
+  const allDuplicateCredentials = useMemo(() => {
     return duplicateGroups.flat();
   }, [duplicateGroups]);
 
@@ -101,7 +100,7 @@ export default function DuplicatesScreen() {
         </Text>
       </View>
       <Text className="text-warning/80 font-sans text-sm">
-        {duplicateCredentials.length} credentials are using duplicate passwords
+        {allDuplicateCredentials.length} credentials are using duplicate passwords
         across {duplicateGroups.length} group
         {duplicateGroups.length !== 1 ? 's' : ''}. Consider using unique
         passwords for better security.

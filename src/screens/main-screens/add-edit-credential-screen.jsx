@@ -29,8 +29,7 @@ export default function AddEditCredentialScreen() {
   const [categoryRefreshKey, setCategoryRefreshKey] = useState(0);
   const { showToast } = useToast();
   const { alert, showAlert, hideAlert } = useAlert();
-  const { addCredential, updateCredential, getCredentialById } =
-    useCredentials();
+  const { addCredential, updateCredential, getCredentialById } = useCredentials();
   const { addCategory, refresh: refreshCategories } = useCategories();
 
   const {

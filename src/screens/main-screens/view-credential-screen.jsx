@@ -1,32 +1,39 @@
 import { ScrollView } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCredentials } from '../../hooks/use-credentials';
 import IosLoading from '../../components/ui/ios-loading';
 import CredentialHeader from '../../components/credential/credential-header';
 import CredentialDetails from '../../components/credential/credential-details';
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 
 export default function ViewCredentialScreen() {
-  const [credential, setCredential] = useState(null);
   const navigation = useNavigation();
   const route = useRoute();
   const { id } = route.params;
 
-  const { getCredentialById, isLoading, refresh, deleteCredential } =
-    useCredentials();
+  const {
+    getCredentialById,
+    isLoading,
+    refresh,
+    deleteCredential,
+    toggleFavorite,
+  } = useCredentials();
 
-  const init = async () => {
-    await refresh();
+  // Get credential directly from context (always up-to-date)
+  const credential = getCredentialById(id);
 
-    const cred = getCredentialById(id);
-
-    setCredential(cred);
-  };
-
-  useEffect(() => {
-    init();
-  }, [isLoading]);
+  useFocusEffect(
+    useCallback(() => {
+      // Only refresh from storage when screen comes into focus
+      // This ensures we get fresh data after editing
+      refresh();
+    }, [refresh]),
+  );
 
   const handleBack = () => {
     navigation.goBack();
@@ -49,8 +56,10 @@ export default function ViewCredentialScreen() {
     }
   };
 
-  const handleToggleFavorite = () => {
-    refresh(); // Refresh the data after favorite toggle
+  const handleToggleFavorite = async () => {
+    if (credential) {
+      await toggleFavorite(credential.id);
+    }
   };
 
   if (isLoading || !credential) {

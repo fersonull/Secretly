@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { useCredentials } from './use-credentials';
 
 export const useDashboard = () => {
-  const { credentials: allCredentials, isRefreshing, refresh } = useCredentials();
+  const { credentials: allCredentials, isLoading, refresh } = useCredentials();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
@@ -52,7 +52,7 @@ export const useDashboard = () => {
     setSelectedCategory,
     categoryCount,
     stats,
-    refreshing: isRefreshing,
+    refreshing: isLoading,
     onRefresh,
   };
 };

@@ -7,10 +7,10 @@ import CredentialCard from '../../components/ui/credential-card';
 
 export default function FavoritesScreen() {
   const navigation = useNavigation();
-  const { credentials, refresh } = useCredentials();
+  const { getFavoriteCredentials, refresh } = useCredentials();
 
-  // Filter only favorite credentials
-  const favoriteCredentials = credentials.filter(credential => credential.isFavorite);
+  // Get favorite credentials directly from context
+  const favoriteCredentials = getFavoriteCredentials();
 
   const handleViewCredential = useCallback(
     id => {

@@ -49,6 +49,11 @@ export const credentialsStorage = {
     }
   },
 
+  // Alias for saveCredential to maintain API consistency
+  async addCredential(userId, credentialData) {
+    return await this.saveCredential(userId, credentialData);
+  },
+
   async updateCredential(userId, credentialId, updates) {
     try {
       const allCredentials = await storage.getItem(CREDENTIALS_STORAGE_KEY) || [];

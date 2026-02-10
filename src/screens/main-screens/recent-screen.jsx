@@ -7,12 +7,10 @@ import CredentialCard from '../../components/ui/credential-card';
 
 export default function RecentScreen() {
   const navigation = useNavigation();
-  const { credentials, refresh } = useCredentials();
+  const { getRecentCredentials, refresh } = useCredentials();
 
-  // Sort by updatedAt and take the 10 most recent
-  const recentCredentials = credentials
-    .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-    .slice(0, 10);
+  // Get recent credentials directly from context
+  const recentCredentials = getRecentCredentials(10);
 
   const handleViewCredential = useCallback(
     id => {

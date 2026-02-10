@@ -7,12 +7,10 @@ import CredentialCard from '../../components/ui/credential-card';
 
 export default function WeakPasswordsScreen() {
   const navigation = useNavigation();
-  const { credentials, refresh } = useCredentials();
+  const { getWeakPasswordCredentials, refresh } = useCredentials();
 
-  // Filter credentials with weak passwords
-  const weakPasswordCredentials = credentials.filter(
-    credential => credential.passwordStrength === 'weak',
-  );
+  // Get weak password credentials directly from context
+  const weakPasswordCredentials = getWeakPasswordCredentials();
 
   const handleViewCredential = useCallback(
     id => {
