@@ -143,7 +143,8 @@ const LoginScreen = ({ navigation }) => {
 
             {/* Login Button */}
             <TouchableOpacity
-              className="bg-primary dark:bg-dark-primary rounded-md py-3.5 mb-4 active:opacity-90"
+              activeOpacity={0.9}
+              className="bg-primary dark:bg-dark-primary rounded-md py-3.5 mb-4"
               onPress={handleLogin}
               disabled={isLoading}
             >
@@ -156,7 +157,10 @@ const LoginScreen = ({ navigation }) => {
             <Divider />
 
             {/* Biometric Login */}
-            <TouchableOpacity className="bg-secondary dark:bg-dark-secondary rounded-md py-3.5 mb-6 border border-border dark:border-dark-border flex-row items-center justify-center">
+            <TouchableOpacity
+              activeOpacity={0.9}
+              className="bg-secondary dark:bg-dark-secondary rounded-md py-3.5 mb-6 border border-border dark:border-dark-border flex-row items-center justify-center"
+            >
               <Lucide
                 name="fingerprint"
                 size={20}
@@ -176,7 +180,10 @@ const LoginScreen = ({ navigation }) => {
               <Text className="text-muted-foreground dark:text-dark-muted-foreground font-sans">
                 Don't have an account?{' '}
               </Text>
-              <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+              <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => navigation.navigate('Register')}
+              >
                 <Text className="text-primary dark:text-dark-primary font-sans-bold">
                   Sign up
                 </Text>
@@ -193,7 +200,6 @@ const LoginScreen = ({ navigation }) => {
         buttons={alert.buttons}
         onClose={hideAlert}
       />
-
 
       <IosLoading visible={isLoading} message="Signing in..." />
     </SafeAreaView>

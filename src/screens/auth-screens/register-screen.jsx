@@ -43,9 +43,11 @@ const LoginScreen = ({ navigation }) => {
     }
 
     if (password.length < 8) {
-      showAlert('Weak Password', 'Password must be at least 8 characters long', [
-        { text: 'OK', onPress: hideAlert },
-      ]);
+      showAlert(
+        'Weak Password',
+        'Password must be at least 8 characters long',
+        [{ text: 'OK', onPress: hideAlert }],
+      );
       return;
     }
 
@@ -130,6 +132,7 @@ const LoginScreen = ({ navigation }) => {
                   autoCapitalize="none"
                 />
                 <TouchableOpacity
+                  activeOpacity={0.9}
                   onPress={() => setShowPassword(!showPassword)}
                   className="p-1"
                 >
@@ -158,6 +161,7 @@ const LoginScreen = ({ navigation }) => {
                   autoCapitalize="none"
                 />
                 <TouchableOpacity
+                  activeOpacity={0.9}
                   onPress={() => setShowPassword(!showPassword)}
                   className="p-1"
                 >
@@ -179,6 +183,7 @@ const LoginScreen = ({ navigation }) => {
 
             {/* Login Button */}
             <TouchableOpacity
+              activeOpacity={0.9}
               className="bg-primary dark:bg-dark-primary rounded-md py-3.5  mb-4 active:opacity-90"
               onPress={handleRegister}
               disabled={isLoading}
@@ -192,7 +197,10 @@ const LoginScreen = ({ navigation }) => {
             <Divider />
 
             {/* Biometric Login */}
-            <TouchableOpacity className="bg-secondary dark:bg-dark-secondary rounded-md py-3.5 mb-6 border border-border dark:border-dark-border flex-row items-center justify-center">
+            <TouchableOpacity
+              activeOpacity={0.9}
+              className="bg-secondary dark:bg-dark-secondary rounded-md py-3.5 mb-6 border border-border dark:border-dark-border flex-row items-center justify-center"
+            >
               <Lucide
                 name="fingerprint"
                 size={20}
@@ -212,7 +220,10 @@ const LoginScreen = ({ navigation }) => {
               <Text className="text-muted-foreground dark:text-dark-muted-foreground font-sans">
                 Already have an account?{' '}
               </Text>
-              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => navigation.navigate('Login')}
+              >
                 <Text className="text-primary dark:text-dark-primary font-sans-bold">
                   Login
                 </Text>
@@ -229,7 +240,6 @@ const LoginScreen = ({ navigation }) => {
         buttons={alert.buttons}
         onClose={hideAlert}
       />
-
 
       <IosLoading visible={isLoading} message="Creating account..." />
     </SafeAreaView>
