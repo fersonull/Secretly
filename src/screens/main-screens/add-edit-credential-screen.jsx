@@ -22,14 +22,15 @@ export default function AddEditCredentialScreen() {
   const route = useRoute();
   const isEdit = !!route.params?.id;
   const credentialId = route.params?.id;
-  
+
   const [showUrlField, setShowUrlField] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [categoryRefreshKey, setCategoryRefreshKey] = useState(0);
   const { showToast } = useToast();
   const { alert, showAlert, hideAlert } = useAlert();
-  const { addCredential, updateCredential, getCredentialById } = useCredentials();
+  const { addCredential, updateCredential, getCredentialById } =
+    useCredentials();
   const { addCategory, refresh: refreshCategories } = useCategories();
 
   const {
@@ -66,7 +67,7 @@ export default function AddEditCredentialScreen() {
     }
 
     setIsLoading(true);
-    
+
     const passwordStrengthInfo = calculatePasswordStrength(formData.password);
     const credentialData = {
       title: formData.title,
@@ -81,45 +82,72 @@ export default function AddEditCredentialScreen() {
     const result = isEdit
       ? await updateCredential(credentialId, credentialData)
       : await addCredential(credentialData);
-    
+
     setIsLoading(false);
 
     if (result.success) {
       navigation.goBack();
-      showToast('success', `Credential ${isEdit ? 'updated' : 'added'} successfully!`);
+      showToast(
+        `Credential ${isEdit ? 'updated' : 'added'} successfully!`,
+        'success',
+      );
     } else {
       showAlert('Error', result.error || 'Failed to save credential', [
         { text: 'OK', onPress: hideAlert },
       ]);
     }
-  }, [validateForm, formData, isEdit, credentialId, addCredential, updateCredential, navigation, showToast, showAlert, hideAlert]);
+  }, [
+    validateForm,
+    formData,
+    isEdit,
+    credentialId,
+    addCredential,
+    updateCredential,
+    navigation,
+    showToast,
+    showAlert,
+    hideAlert,
+  ]);
 
   const handleClose = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
-  const handleAddCategory = useCallback(async (categoryName, icon) => {
-    const result = await addCategory(categoryName, icon);
-    
-    if (result.success) {
-      setShowCategoryModal(false);
-      // Force refresh categories to ensure immediate UI update
-      await refreshCategories();
-      // Trigger CategorySelector refresh
-      setCategoryRefreshKey(prev => prev + 1);
-      updateField('category', result.category.id);
-      showToast('success', 'Custom category added successfully!');
-    } else {
-      showAlert('Error', result.error || 'Failed to add category', [
-        { text: 'OK', onPress: hideAlert },
-      ]);
-    }
-  }, [addCategory, refreshCategories, updateField, showToast, showAlert, hideAlert]);
+  const handleAddCategory = useCallback(
+    async (categoryName, icon) => {
+      const result = await addCategory(categoryName, icon);
+
+      if (result.success) {
+        setShowCategoryModal(false);
+        // Force refresh categories to ensure immediate UI update
+        await refreshCategories();
+        // Trigger CategorySelector refresh
+        setCategoryRefreshKey(prev => prev + 1);
+        updateField('category', result.category.id);
+        showToast('Custom category added successfully!', 'success');
+      } else {
+        showAlert('Error', result.error || 'Failed to add category', [
+          { text: 'OK', onPress: hideAlert },
+        ]);
+      }
+    },
+    [
+      addCategory,
+      refreshCategories,
+      updateField,
+      showToast,
+      showAlert,
+      hideAlert,
+    ],
+  );
 
   const handleGeneratePassword = useCallback(() => {
     const result = generatePassword();
+
+    console.log(result);
+
     if (result.success) {
-      showToast('success', result.message);
+      showToast(result.message, 'success');
     }
   }, [generatePassword, showToast]);
 
@@ -250,8 +278,10 @@ export default function AddEditCredentialScreen() {
         onClose={hideAlert}
       />
 
-
-      <IosLoading visible={isLoading} message={isEdit ? 'Updating...' : 'Saving...'} />
+      <IosLoading
+        visible={isLoading}
+        message={isEdit ? 'Updating...' : 'Saving...'}
+      />
 
       <AddCategoryModal
         visible={showCategoryModal}
