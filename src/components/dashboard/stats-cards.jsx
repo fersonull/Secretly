@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native';
 import Lucide from '@react-native-vector-icons/lucide';
 
-export default function StatsCards({ total, strong, weak }) {
+export default function StatsCards({ total, strong, weak, duplicates }) {
   return (
     <ScrollView
       horizontal
@@ -28,6 +28,13 @@ export default function StatsCards({ total, strong, weak }) {
         label="Weak"
         value={weak}
         color="bg-danger"
+        iconColor="#FFFFFF"
+      />
+      <StatCard
+        icon="copy"
+        label="Duplicates"
+        value={duplicates}
+        color="bg-warning"
         iconColor="#FFFFFF"
       />
     </ScrollView>

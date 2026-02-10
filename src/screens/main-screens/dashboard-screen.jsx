@@ -76,6 +76,7 @@ export default function DashboardScreen() {
           total={stats.total}
           strong={stats.strong}
           weak={stats.weak}
+          duplicates={stats.duplicates}
         />
 
         <CategoryChips

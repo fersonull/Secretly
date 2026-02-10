@@ -2,17 +2,20 @@ import { useState, useMemo, useCallback } from 'react';
 import { useCredentials } from './use-credentials';
 
 export const useDashboard = () => {
-  const { credentials: allCredentials, isLoading, refresh } = useCredentials();
+  const { credentials: allCredentials, isLoading, refresh, getDuplicatePasswordCredentials } = useCredentials();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const stats = useMemo(() => {
     const total = allCredentials.length;
-    const strong = allCredentials.filter(c => c.passwordStrength === 'strong').length;
+    const strong = allCredentials.filter(c => 
+      c.passwordStrength === 'strong' || c.passwordStrength === 'medium'
+    ).length;
     const weak = allCredentials.filter(c => c.passwordStrength === 'weak').length;
+    const duplicates = getDuplicatePasswordCredentials().length;
 
-    return { total, strong, weak };
-  }, [allCredentials]);
+    return { total, strong, weak, duplicates };
+  }, [allCredentials, getDuplicatePasswordCredentials]);
 
   const categoryCount = useMemo(() => {
     return allCredentials.reduce((acc, item) => {
