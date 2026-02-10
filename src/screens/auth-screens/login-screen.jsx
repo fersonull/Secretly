@@ -46,7 +46,7 @@ const LoginScreen = ({ navigation }) => {
     setIsLoading(false);
 
     if (result.success) {
-      showToast('success', 'Login successful! Welcome back.');
+      showToast('Login successful!', 'success');
     } else {
       showAlert('Login Failed', result.error || 'An error occurred', [
         { text: 'Try Again', onPress: hideAlert },

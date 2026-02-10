@@ -56,7 +56,7 @@ const LoginScreen = ({ navigation }) => {
     setIsLoading(false);
 
     if (result.success) {
-      showToast('success', 'Account created! Welcome aboard.');
+      showToast('Account created! Welcome aboard.', 'success');
     } else {
       showAlert('Registration Failed', result.error || 'An error occurred', [
         { text: 'Try Again', onPress: hideAlert },
