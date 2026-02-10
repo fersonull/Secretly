@@ -1,20 +1,21 @@
 import { useTheme } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import AppHeader from '../components/common/app-header';
-import CategorySocialScreen from '../screens/main-screens/category-social-screen';
-import CategoryBankingScreen from '../screens/main-screens/category-banking-screen';
-import CategoryEmailScreen from '../screens/main-screens/category-email-screen';
+import FavoritesScreen from '../screens/main-screens/favorites-screen';
+import RecentScreen from '../screens/main-screens/recent-screen';
+import WeakPasswordsScreen from '../screens/main-screens/weak-passwords-screen';
+import DuplicatesScreen from '../screens/main-screens/duplicates-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TopTab = createMaterialTopTabNavigator();
 
 export default function CategoryTopTabsNavigator() {
-  const colorScheme = useTheme();
-  const isDark = colorScheme === 'dark';
+  const theme = useTheme();
+  const isDark = theme.dark;
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-dark-background">
-      <AppHeader title="Categories" />
+      <AppHeader title="Organize" />
       <TopTab.Navigator
         screenOptions={{
           tabBarStyle: {
@@ -45,12 +46,25 @@ export default function CategoryTopTabsNavigator() {
         }}
       >
         <TopTab.Screen
-          name="SocialMedia"
-          component={CategorySocialScreen}
-          options={{ title: 'Social Media' }}
+          name="Favorites"
+          component={FavoritesScreen}
+          options={{ title: 'Favorites' }}
         />
-        <TopTab.Screen name="Banking" component={CategoryBankingScreen} />
-        <TopTab.Screen name="Email" component={CategoryEmailScreen} />
+        <TopTab.Screen 
+          name="Recent" 
+          component={RecentScreen}
+          options={{ title: 'Recent' }}
+        />
+        <TopTab.Screen 
+          name="WeakPasswords" 
+          component={WeakPasswordsScreen}
+          options={{ title: 'Weak' }}
+        />
+        <TopTab.Screen 
+          name="Duplicates" 
+          component={DuplicatesScreen}
+          options={{ title: 'Duplicates' }}
+        />
       </TopTab.Navigator>
     </SafeAreaView>
   );
